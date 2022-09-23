@@ -12,4 +12,14 @@ public class Wall extends Entity {
     public void update() {
 
     }
+
+    @Override
+    public void update(int dx, int dy) {
+
+    }
+
+    @Override
+    public void update(int dx, int dy, Image img) {
+
+    }
 }

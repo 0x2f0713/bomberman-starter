@@ -2,10 +2,12 @@ package uet.oop.bomberman;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
@@ -26,6 +28,7 @@ public class BombermanGame extends Application {
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
+    boolean running, goNorth, goSouth, goEast, goWest;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -44,6 +47,32 @@ public class BombermanGame extends Application {
         // Tao scene
         Scene scene = new Scene(root);
 
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case UP:    goNorth = true; break;
+                    case DOWN:  goSouth = true; break;
+                    case LEFT:  goWest  = true; break;
+                    case RIGHT: goEast  = true; break;
+                    case SHIFT: running = true; break;
+                }
+            }
+        });
+
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case UP:    goNorth = false; break;
+                    case DOWN:  goSouth = false; break;
+                    case LEFT:  goWest  = false; break;
+                    case RIGHT: goEast  = false; break;
+                    case SHIFT: running = false; break;
+                }
+            }
+        });
+
         // Them scene vao stage
         stage.setScene(scene);
         stage.show();
@@ -51,8 +80,8 @@ public class BombermanGame extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                render();
                 update();
+                render();
             }
         };
         timer.start();
@@ -79,7 +108,16 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-        entities.forEach(Entity::update);
+        int dx = 0, dy = 0;
+
+        if (goNorth) dy -= 1;
+        if (goSouth) dy += 1;
+        if (goEast)  dx += 1;
+        if (goWest)  dx -= 1;
+        if (running) { dx *= 3; dy *= 3; }
+        int finalDx = dx;
+        int finalDy = dy;
+        entities.forEach(i -> i.update(finalDx, finalDy));
     }
 
     public void render() {

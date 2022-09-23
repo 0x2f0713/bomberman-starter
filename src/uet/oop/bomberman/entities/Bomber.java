@@ -16,4 +16,15 @@ public class Bomber extends Entity {
     public void update() {
 
     }
+
+    @Override
+    public void update(int dx, int dy) {
+        x += dx;
+        y += dy;
+    }
+
+    @Override
+    public void update(int dx, int dy, Image img) {
+
+    }
 }
