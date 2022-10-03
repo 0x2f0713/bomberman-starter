@@ -3,17 +3,24 @@ package uet.oop.bomberman;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.Bomber;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.ui.HUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +29,22 @@ public class BombermanGame extends Application {
     
     public static final int WIDTH = 20;
     public static final int HEIGHT = 15;
-    
+
+    public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
+
+    // Text
+    private Label levelLabel = new Label("LEVEL 1");
+    private Label scoreLabel = new Label("0");
+    private Label counterLabel = new Label("9999");
+
     private GraphicsContext gc;
     private Canvas canvas;
+    private GridPane hudPane;
+    private GridPane layoutPane;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+
+    private int level = 1;
 
     boolean running, goNorth, goSouth, goEast, goWest;
 
@@ -36,13 +54,35 @@ public class BombermanGame extends Application {
 
     @Override
     public void start(Stage stage) {
+
+        Label levelLabel = new Label("LEVEL 1");
+        HUD hud = new HUD(retrogamingFont);
+
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+
+        // Tao pane
+        layoutPane = new GridPane();
+        hudPane = new GridPane();
+        levelLabel.setMinWidth(stage.getWidth() / 3);
+        scoreLabel.setMinWidth(stage.getWidth() / 3);
+        counterLabel.setMinWidth(stage.getWidth() / 3);
+        hudPane.addColumn(0, hud.hud);
+//        hudPane.addColumn(0, levelLabel);
+//        hudPane.setHalignment(levelLabel, HPos.RIGHT);
+//        hudPane.addColumn(1, scoreLabel);
+//        hudPane.setHalignment(levelLabel, HPos.CENTER);
+//        hudPane.addColumn(2, counterLabel);
+//        hudPane.setHalignment(levelLabel, HPos.LEFT);
+
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
+        layoutPane.addRow(0, hudPane);
+        layoutPane.addRow(1, canvas);
+
         Group root = new Group();
-        root.getChildren().add(canvas);
+        root.getChildren().addAll(layoutPane);
 
         // Tao scene
         Scene scene = new Scene(root);
@@ -74,8 +114,11 @@ public class BombermanGame extends Application {
         });
 
         // Them scene vao stage
+        stage.setTitle("Bomberman Game");
         stage.setScene(scene);
         stage.show();
+
+        hud.setRowWidth(stage.getWidth());
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
