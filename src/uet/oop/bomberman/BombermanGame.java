@@ -32,10 +32,8 @@ public class BombermanGame extends Application {
 
     public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
 
-    // Text
-    private Label levelLabel = new Label("LEVEL 1");
-    private Label scoreLabel = new Label("0");
-    private Label counterLabel = new Label("9999");
+    // HUD
+    private HUD hud;
 
     private GraphicsContext gc;
     private Canvas canvas;
@@ -64,9 +62,6 @@ public class BombermanGame extends Application {
         // Tao pane
         layoutPane = new GridPane();
         hudPane = new GridPane();
-        levelLabel.setMinWidth(stage.getWidth() / 3);
-        scoreLabel.setMinWidth(stage.getWidth() / 3);
-        counterLabel.setMinWidth(stage.getWidth() / 3);
         hudPane.addColumn(0, hud.hud);
 //        hudPane.addColumn(0, levelLabel);
 //        hudPane.setHalignment(levelLabel, HPos.RIGHT);
