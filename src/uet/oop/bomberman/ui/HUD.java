@@ -9,40 +9,55 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import uet.oop.bomberman.PlayerState;
 
 import static uet.oop.bomberman.BombermanGame.retrogamingFont;
 
 public class HUD {
 
+    private GameText levelText;
+    private GameText timeText;
+    private GameText scoreText;
+    private GameText speedText;
+    private GameText flameText;
+    private GameText bombText;
+    private GameText lifeText;
+
+
     private final static int textPadding = 20;
     private final static int rowPadding = 10;
 
     private final static Insets collumnPaddingInsets = new Insets(rowPadding, textPadding, rowPadding, textPadding);
-//    private final static Insets collumnPaddingInsets = new Insets(0, 0, 0, 0);
-//    private final static Insets rowPaddingInsets = new Insets(padding, 0, padding, 0);
 
     public VBox hud;
     private HBox row1;
     private HBox row2;
 
-    public HUD(Font font) {
+    public HUD(Font font, PlayerState state) {
+        setLevelText(new GameText(10, 50, font, "LEVEL %d", state.getLevel()));
+        setTimeText(new GameText(10, 50, font, "TIME %d", state.getRemainingTime()));
         row1 = createRow(
-                new GameText(10, 50, "LEVEL 1", font),
+                this.levelText,
                 spacer(),
-                new GameText(10, 50, "TIME 120", font)
+                this.timeText
         );
+        setScoreText(new GameText(10, 50, font, "SCORE %d", state.getScore()));
+        setSpeedText(new GameText(10, 50, font, "SPEED %d", state.getSpeed()));
+        setFlameText(new GameText(10, 50, font, "FLAME %d", state.getFlame()));
+        setBombText(new GameText(10, 50, font, "BOMB %d", state.getBomb()));
+        setLifeText(new GameText(10, 50, font, "LIFE %d", state.getLife()));
         row2 = createRow(
-                new GameText(10, 50, "SCORE: 0", font),
+                this.scoreText,
                 spacer(),
-                new GameText(10, 50, "SPEED: 120", font),
+                this.speedText,
                 spacer(),
-                new GameText(10, 50, "FLAME 1", font),
+                this.flameText,
                 spacer(),
-                new GameText(10, 50, "BOMB 1", font),
+                this.bombText,
                 spacer(),
-                new GameText(10, 50, "LIFE 3", font),
-                spacer(),
-                new GameText(10, 50, "E 10", font)
+                this.lifeText
+//                spacer(),
+//                new GameText(10, 50, "E 10", font)
         );
         hud = new VBox(
                 row1,
@@ -71,5 +86,88 @@ public class HUD {
         Text _text = new Text(v, v1, s);
         _text.setFont(retrogamingFont);
         return _text;
+    }
+
+    public void updateLevel(int newLevel) {
+        levelText.updateText(newLevel);
+    }
+
+    public void updateRemainingTime(int newRemainingTime) {
+        timeText.updateText(newRemainingTime);
+    }
+
+    public void updateScore(int newScore) {
+        scoreText.updateText(newScore);
+    }
+
+    public void updateSpeed(int newSpeed) {
+        speedText.updateText(newSpeed);
+    }
+    public void updateFlame(int newFlame) {
+        flameText.updateText(newFlame);
+    }
+
+    public void updateBomb(int newBomb) {
+        bombText.updateText(newBomb);
+    }
+
+    public void updateLife(int newLife) {
+        lifeText.updateText(newLife);
+    }
+
+    public GameText getLevelText() {
+        return levelText;
+    }
+
+    public void setLevelText(GameText levelText) {
+        this.levelText = levelText;
+    }
+
+    public GameText getTimeText() {
+        return timeText;
+    }
+
+    public void setTimeText(GameText timeText) {
+        this.timeText = timeText;
+    }
+
+    public GameText getScoreText() {
+        return scoreText;
+    }
+
+    public void setScoreText(GameText scoreText) {
+        this.scoreText = scoreText;
+    }
+
+    public GameText getSpeedText() {
+        return speedText;
+    }
+
+    public void setSpeedText(GameText speedText) {
+        this.speedText = speedText;
+    }
+
+    public GameText getFlameText() {
+        return flameText;
+    }
+
+    public void setFlameText(GameText flameText) {
+        this.flameText = flameText;
+    }
+
+    public GameText getBombText() {
+        return bombText;
+    }
+
+    public void setBombText(GameText bombText) {
+        this.bombText = bombText;
+    }
+
+    public GameText getLifeText() {
+        return lifeText;
+    }
+
+    public void setLifeText(GameText lifeText) {
+        this.lifeText = lifeText;
     }
 }
