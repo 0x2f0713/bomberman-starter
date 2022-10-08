@@ -15,10 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import uet.oop.bomberman.entities.Bomber;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
-import uet.oop.bomberman.entities.Wall;
+import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.ui.HUD;
 import uet.oop.bomberman.utils.Level;
@@ -133,14 +130,44 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
+        for (int i = 0; i < Level.level1.getRowCount(); i++) {
+            for (int j = 0; j < Level.level1.getColumnCount(); j++) {
                 Entity object;
-                if (j == 0 || j == HEIGHT - 1 || i == 0 || i == WIDTH - 1) {
-                    object = new Wall(i, j, Sprite.wall.getFxImage());
-                }
-                else {
-                    object = new Grass(i, j, Sprite.grass.getFxImage());
+                char o = Level.level1.map.map.get(i).row.get(j);
+                switch (o) {
+                    case '#':
+                        object = new Wall(j, i, Sprite.wall.getFxImage());
+                        break;
+                    case '*':
+                        object = new Brick(j, i, Sprite.brick.getFxImage());
+                        break;
+                    case 'x':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+                        object = new Portal(j, i, Sprite.portal.getFxImage());
+                        break;
+                    case '1':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+                        object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
+                        break;
+                    case '2':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+                        object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                        break;
+                    case 'b':
+                        object = new BombItem(j, i, Sprite.powerup_bombs.getFxImage());
+                        break;
+                    case 'f':
+                        object = new FlameItem(j, i, Sprite.powerup_flames.getFxImage());
+                        break;
+                    case 's':
+                        object = new SpeedItem(j, i, Sprite.powerup_speed.getFxImage());
+                        break;
+                    default:
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+
                 }
                 stillObjects.add(object);
             }
