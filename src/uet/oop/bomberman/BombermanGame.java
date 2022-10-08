@@ -21,6 +21,7 @@ import uet.oop.bomberman.entities.Grass;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.ui.HUD;
+import uet.oop.bomberman.utils.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +43,12 @@ public class BombermanGame extends Application {
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
 
-    private int level = 1;
+    private static PlayerState state;
 
     boolean running, goNorth, goSouth, goEast, goWest;
 
     public static void main(String[] args) {
+        state = new PlayerState();
         Application.launch(BombermanGame.class);
     }
 
@@ -54,7 +56,7 @@ public class BombermanGame extends Application {
     public void start(Stage stage) {
 
         Label levelLabel = new Label("LEVEL 1");
-        HUD hud = new HUD(retrogamingFont);
+        hud = new HUD(retrogamingFont, state);
 
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
