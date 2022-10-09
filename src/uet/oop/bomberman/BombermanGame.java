@@ -44,6 +44,12 @@ public class BombermanGame extends Application {
 
     boolean running, goNorth, goSouth, goEast, goWest;
 
+    private Scene scene;
+    public void init() {
+        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        entities.add(bomberman);
+    }
+
     public static void main(String[] args) {
         state = new PlayerState();
         Application.launch(BombermanGame.class);
@@ -79,8 +85,40 @@ public class BombermanGame extends Application {
         root.getChildren().addAll(layoutPane);
 
         // Tao scene
-        Scene scene = new Scene(root);
+        scene = new Scene(root);
 
+
+
+
+
+        // Them scene vao stage
+        stage.setTitle("Bomberman Game");
+        stage.setScene(scene);
+        stage.show();
+
+        hud.setRowWidth(stage.getWidth());
+
+        AnimationTimer timer = new AnimationTimer() {
+
+            private long lastUpdate = 0;
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate > 70000000) {
+                    keyPressedListener();
+                    keyReleasedListener();
+                    update();
+                    render();
+                    lastUpdate = now;
+                }
+            }
+        };
+        timer.start();
+
+        createMap();
+
+    }
+
+    void keyPressedListener() {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -93,7 +131,9 @@ public class BombermanGame extends Application {
                 }
             }
         });
+    }
 
+    void keyReleasedListener() {
         scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -106,27 +146,6 @@ public class BombermanGame extends Application {
                 }
             }
         });
-
-        // Them scene vao stage
-        stage.setTitle("Bomberman Game");
-        stage.setScene(scene);
-        stage.show();
-
-        hud.setRowWidth(stage.getWidth());
-
-        AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                update();
-                render();
-            }
-        };
-        timer.start();
-
-        createMap();
-
-        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
     }
 
     public void createMap() {
@@ -177,13 +196,16 @@ public class BombermanGame extends Application {
     public void update() {
         int dx = 0, dy = 0;
 
-        if (goNorth) dy -= 1;
-        if (goSouth) dy += 1;
-        if (goEast)  dx += 1;
-        if (goWest)  dx -= 1;
+        final int DEFAULT_SPEED = 10;
+
+        if (goNorth) dy -= DEFAULT_SPEED;
+        if (goSouth) dy += DEFAULT_SPEED;
+        if (goEast)  dx += DEFAULT_SPEED;
+        if (goWest)  dx -= DEFAULT_SPEED;
         if (running) { dx *= 3; dy *= 3; }
         int finalDx = dx;
         int finalDy = dy;
+
         entities.forEach(i -> i.update(finalDx, finalDy));
     }
 
