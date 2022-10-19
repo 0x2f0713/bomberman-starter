@@ -20,13 +20,14 @@ import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.ui.HUD;
 import uet.oop.bomberman.utils.Level;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BombermanGame extends Application {
-    
-    public static final int WIDTH = 32;
-    public static final int HEIGHT = 18;
+    private Bomber player;
+
+    public static int currentBomb = 0;
+    public static final int WIDTH = 31;
+    public static final int HEIGHT = 13;
 
     public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
 
@@ -49,8 +50,8 @@ public class BombermanGame extends Application {
 
     private Scene scene;
     public void init() {
-        Entity bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
+        player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        entities.add(player);
     }
 
     public static void main(String[] args) {
