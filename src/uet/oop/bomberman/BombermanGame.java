@@ -121,36 +121,6 @@ public class BombermanGame extends Application {
 
     }
 
-    void keyPressedListener() {
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case UP:    goNorth = true; break;
-                    case DOWN:  goSouth = true; break;
-                    case LEFT:  goWest  = true; break;
-                    case RIGHT: goEast  = true; break;
-                    case SHIFT: running = true; break;
-                }
-            }
-        });
-    }
-
-    void keyReleasedListener() {
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case UP:    goNorth = false; break;
-                    case DOWN:  goSouth = false; break;
-                    case LEFT:  goWest  = false; break;
-                    case RIGHT: goEast  = false; break;
-                    case SHIFT: running = false; break;
-                }
-            }
-        });
-    }
-
     public void createMap() {
         for (int i = 0; i < Level.level1.getRowCount(); i++) {
             for (int j = 0; j < Level.level1.getColumnCount(); j++) {
