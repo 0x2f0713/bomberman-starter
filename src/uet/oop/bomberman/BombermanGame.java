@@ -174,9 +174,13 @@ public class BombermanGame extends Application {
 
         if (goNorth) dy -= DEFAULT_SPEED;
         if (goSouth) dy += DEFAULT_SPEED;
-        if (goEast)  dx += DEFAULT_SPEED;
-        if (goWest)  dx -= DEFAULT_SPEED;
-        if (running) { dx *= 3; dy *= 3; }
+        if (goEast) dx += DEFAULT_SPEED;
+        if (goWest) dx -= DEFAULT_SPEED;
+        if (running) {
+            dx *= 1.5;
+            dy *= 1.5;
+        }
+
         int finalDx = dx;
         int finalDy = dy;
 
