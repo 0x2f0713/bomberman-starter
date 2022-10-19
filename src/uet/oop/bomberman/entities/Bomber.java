@@ -14,6 +14,38 @@ public class Bomber extends Entity {
     private boolean goRight;
     private EntityState BombermanState;
 
+    public boolean isGoUp() {
+        return goUp;
+    }
+
+    public void setGoUp(boolean goUp) {
+        this.goUp = goUp;
+    }
+
+    public boolean isGoDown() {
+        return goDown;
+    }
+
+    public void setGoDown(boolean goDown) {
+        this.goDown = goDown;
+    }
+
+    public boolean isGoLeft() {
+        return goLeft;
+    }
+
+    public void setGoLeft(boolean goLeft) {
+        this.goLeft = goLeft;
+    }
+
+    public boolean isGoRight() {
+        return goRight;
+    }
+
+    public void setGoRight(boolean goRight) {
+        this.goRight = goRight;
+    }
+
     public Bomber(int x, int y, Image img) {
         super( x, y, img);
         BombermanState = EntityState.STOP;
@@ -33,7 +65,16 @@ public class Bomber extends Entity {
         }
         x += dx;
         y += dy;
+        //System.out.println(x + " " + y);
         changeMovement(dx, dy);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     private void changeMovement(int dx, int dy) {
