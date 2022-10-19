@@ -39,6 +39,9 @@ public class BombermanGame extends Application {
     private GridPane layoutPane;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+    private ArrayDeque<Bomb> bombDeque = new ArrayDeque<>();
+
+    private List<Flame> flameList = new ArrayList<>();
 
     private static PlayerState state;
 
@@ -207,11 +210,141 @@ public class BombermanGame extends Application {
         int finalDy = dy;
 
         entities.forEach(i -> i.update(finalDx, finalDy));
+
+        if (bombDeque.size() > 0) {
+            updateBomb();
+        }
+        if (flameList.size() > 0) {
+            updateFlame();
+            flameList.forEach(Flame::update);
+        }
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
+        if (bombDeque.size() > 0) {
+            bombDeque.forEach(g -> g.render(gc));
+        }
+
+        if (flameList.size() > 0) {
+            flameList.forEach(g -> g.render(gc));
+        }
     }
+
+    private void keyPressedListener() {
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case UP:
+                    goNorth = true;
+                    break;
+                case DOWN:
+                    goSouth = true;
+                    break;
+                case LEFT:
+                    goWest = true;
+                    break;
+                case RIGHT:
+                    goEast = true;
+                    break;
+                case SHIFT:
+                    running = true;
+                    break;
+                case SPACE:
+                    if (currentBomb < state.getBomb()) {
+                        Bomb bomb = new Bomb((player.getX() + 14) / 32, (player.getY() + 14) / 32, Sprite.bomb.getFxImage());
+                        bombDeque.offerLast(bomb);
+                        currentBomb++;
+                    }
+            }
+        });
+    }
+
+    private void keyReleasedListener() {
+        scene.setOnKeyReleased(event -> {
+            switch (event.getCode()) {
+                case UP:
+                    goNorth = false;
+                    break;
+                case DOWN:
+                    goSouth = false;
+                    break;
+                case LEFT:
+                    goWest = false;
+                    break;
+                case RIGHT:
+                    goEast = false;
+                    break;
+                case SHIFT:
+                    running = false;
+                    break;
+            }
+        });
+    }
+
+    private void updateBomb() {
+        assert bombDeque.peek() != null;
+        if (bombDeque.peek().isExploded()) {
+            addFlame(Objects.requireNonNull(bombDeque.poll()));
+            currentBomb--;
+        }
+        bombDeque.forEach(Entity::update);
+    }
+
+    private void addFlame(Bomb bomb) {
+        int i = 1;
+        while (i <= state.getFlame()) {
+            Flame flame1 = new Flame((bomb.getX() / 32) + i, (bomb.getY() / 32),
+                    Sprite.explosion_horizontal.getFxImage(), "right");
+
+            Flame flame2 = new Flame((bomb.getX() / 32) - i, (bomb.getY() / 32),
+                    Sprite.explosion_horizontal.getFxImage(), "left");
+
+            Flame flame3 = new Flame((bomb.getX() / 32), (bomb.getY() / 32) + i,
+                    Sprite.explosion_vertical.getFxImage(), "down");
+
+            Flame flame4 = new Flame((bomb.getX() / 32), (bomb.getY() / 32) - i,
+                    Sprite.explosion_vertical.getFxImage(), "top");
+
+            if (i != state.getFlame()) {
+                flame1.setPosition("mid");
+                flame2.setPosition("mid");
+                flame3.setPosition("mid");
+                flame4.setPosition("mid");
+            } else {
+                flame1.setPosition("last");
+                flame1.setImg(Sprite.explosion_horizontal_right_last.getFxImage());
+
+                flame2.setPosition("last");
+                flame2.setImg(Sprite.explosion_horizontal_left_last.getFxImage());
+
+                flame3.setPosition("last");
+                flame3.setImg(Sprite.explosion_vertical_down_last.getFxImage());
+
+                flame4.setPosition("last");
+                flame4.setImg(Sprite.explosion_vertical_top_last.getFxImage());
+            }
+            flameList.add(flame1);
+            flameList.add(flame2);
+            flameList.add(flame3);
+            flameList.add(flame4);
+            i++;
+        }
+
+        flameList.add(new Flame((bomb.getX() / 32), (bomb.getY() / 32),
+                Sprite.bomb_exploded.getFxImage(), "center"));
+    }
+
+    private void updateFlame() {
+        int i = 0;
+        while (i < flameList.size()) {
+            if (flameList.get(i).isDisappear()) {
+                flameList.remove(0);
+            } else {
+                break;
+            }
+        }
+    }
+
 }
