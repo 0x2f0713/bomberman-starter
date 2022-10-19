@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
@@ -43,6 +45,9 @@ public class BombermanGame extends Application {
     private ArrayDeque<Bomb> bombDeque = new ArrayDeque<>();
 
     private List<Flame> flameList = new ArrayList<>();
+    private List<Entity> obstacleObjects = new ArrayList<>();
+
+    private List<Entity> boosterObjects = new ArrayList<>();
 
     private static PlayerState state;
 
@@ -130,9 +135,11 @@ public class BombermanGame extends Application {
                 switch (o) {
                     case '#':
                         object = new Wall(j, i, Sprite.wall.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     case '*':
                         object = new Brick(j, i, Sprite.brick.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     case 'x':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
@@ -160,9 +167,10 @@ public class BombermanGame extends Application {
                         break;
                     default:
                         object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
 
                 }
-                stillObjects.add(object);
+
             }
         }
     }
@@ -184,7 +192,17 @@ public class BombermanGame extends Application {
         int finalDx = dx;
         int finalDy = dy;
 
-        entities.forEach(i -> i.update(finalDx, finalDy));
+        entities.forEach(i -> {
+            if (i instanceof Bomber) {
+                for (Entity entity : obstacleObjects) {
+                    Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy, i.shape.getHeight(), i.shape.getWidth());
+                    if (entity.shape.intersects(shape.getBoundsInLocal())) {
+                        return;
+                    }
+                }
+            }
+            i.update(finalDx, finalDy);
+        });
 
         if (bombDeque.size() > 0) {
             updateBomb();
@@ -198,7 +216,13 @@ public class BombermanGame extends Application {
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+        obstacleObjects.forEach(g -> g.render(gc));
+        entities.forEach(g -> {
+            if (g instanceof Bomber) {
+                drawRectangle(gc, g.shape);
+            }
+            g.render(gc);
+        });
         if (bombDeque.size() > 0) {
             bombDeque.forEach(g -> g.render(gc));
         }
@@ -322,4 +346,13 @@ public class BombermanGame extends Application {
         }
     }
 
+    private void drawRectangle(GraphicsContext gc, Rectangle rect){
+        gc.setFill(Color.WHITESMOKE);
+        gc.fillRect(rect.getX(),
+                rect.getY(),
+                rect.getWidth(),
+                rect.getHeight());
+        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.BLUE);
+    }
 }
