@@ -13,11 +13,14 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.ui.HUD;
+import uet.oop.bomberman.utils.CollisionChecker;
 import uet.oop.bomberman.utils.Level;
 
 import java.util.ArrayList;
@@ -39,6 +42,9 @@ public class BombermanGame extends Application {
     private GridPane layoutPane;
     private List<Entity> entities = new ArrayList<>();
     private List<Entity> stillObjects = new ArrayList<>();
+    private List<Entity> obstacleObjects = new ArrayList<>();
+
+    private List<Entity> boosterObjects = new ArrayList<>();
 
     private static PlayerState state;
 
@@ -156,9 +162,11 @@ public class BombermanGame extends Application {
                 switch (o) {
                     case '#':
                         object = new Wall(j, i, Sprite.wall.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     case '*':
                         object = new Brick(j, i, Sprite.brick.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     case 'x':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
@@ -176,19 +184,29 @@ public class BombermanGame extends Application {
                         object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
                         break;
                     case 'b':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
                         object = new BombItem(j, i, Sprite.powerup_bombs.getFxImage());
+                        boosterObjects.add(object);
                         break;
                     case 'f':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
                         object = new FlameItem(j, i, Sprite.powerup_flames.getFxImage());
+                        boosterObjects.add(object);
                         break;
                     case 's':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
                         object = new SpeedItem(j, i, Sprite.powerup_speed.getFxImage());
+                        boosterObjects.add(object);
                         break;
                     default:
                         object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
 
                 }
-                stillObjects.add(object);
+
             }
         }
     }
@@ -206,12 +224,39 @@ public class BombermanGame extends Application {
         int finalDx = dx;
         int finalDy = dy;
 
-        entities.forEach(i -> i.update(finalDx, finalDy));
+        entities.forEach(i -> {
+            if (i instanceof Bomber) {
+                for (Entity entity : obstacleObjects) {
+                    Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy, i.shape.getHeight(), i.shape.getWidth());
+                    if (entity.shape.intersects(shape.getBoundsInLocal())) {
+                        return;
+                    }
+                }
+            }
+            i.update(finalDx, finalDy);
+        });
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+        obstacleObjects.forEach(g -> g.render(gc));
+        entities.forEach(g -> {
+            if (g instanceof Bomber) {
+                drawRectangle(gc, g.shape);
+            }
+            g.render(gc);
+        });
+    }
+
+
+    private void drawRectangle(GraphicsContext gc, Rectangle rect){
+        gc.setFill(Color.WHITESMOKE);
+        gc.fillRect(rect.getX(),
+                rect.getY(),
+                rect.getWidth(),
+                rect.getHeight());
+        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.BLUE);
     }
 }
