@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import uet.oop.bomberman.audio.Sound;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.awt.*;
@@ -71,9 +72,13 @@ public class Bomber extends Entity {
             BombermanState = EntityState.MOVE_1;
         }
         x += dx;
+        y += dy;
         shape.setX(x);
         shape.setY(y);
-        y += dy;
+        if (dx != 0 ||  dy != 0) {
+            Sound.walk_1.play();
+            Sound.walk_1.stop();
+        }
         //System.out.println(x + " " + y);
         changeMovement(dx, dy);
     }
