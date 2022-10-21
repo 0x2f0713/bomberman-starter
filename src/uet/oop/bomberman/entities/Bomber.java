@@ -5,17 +5,56 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.graphics.Sprite;
+
+import java.awt.*;
 
 public class Bomber extends Entity {
     private boolean goUp;
     private boolean goDown;
     private boolean goLeft;
     private boolean goRight;
+
+    public boolean collisionOn = false;
     private EntityState BombermanState;
 
+    public boolean isGoUp() {
+        return goUp;
+    }
+
+    public void setGoUp(boolean goUp) {
+        this.goUp = goUp;
+    }
+
+    public boolean isGoDown() {
+        return goDown;
+    }
+
+    public void setGoDown(boolean goDown) {
+        this.goDown = goDown;
+    }
+
+    public boolean isGoLeft() {
+        return goLeft;
+    }
+
+    public void setGoLeft(boolean goLeft) {
+        this.goLeft = goLeft;
+    }
+
+    public boolean isGoRight() {
+        return goRight;
+    }
+
+    public void setGoRight(boolean goRight) {
+        this.goRight = goRight;
+    }
+
     public Bomber(int x, int y, Image img) {
-        super( x, y, img);
+        super(x, y, img);
+        shape = new Rectangle(33, 33, 12 / 16.0 * Sprite.SCALED_SIZE, 12 / 16.0 * Sprite.SCALED_SIZE);
         BombermanState = EntityState.STOP;
         goUp = goDown = goLeft = false;
         goRight = true;
@@ -32,8 +71,19 @@ public class Bomber extends Entity {
             BombermanState = EntityState.MOVE_1;
         }
         x += dx;
+        shape.setX(x);
+        shape.setY(y);
         y += dy;
+        //System.out.println(x + " " + y);
         changeMovement(dx, dy);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     private void changeMovement(int dx, int dy) {
@@ -63,8 +113,7 @@ public class Bomber extends Entity {
                     BombermanState = EntityState.MOVE_1;
                 }
             }
-        }
-        else if (dy != 0 && dx == 0) {
+        } else if (dy != 0 && dx == 0) {
             if (dy > 0) {
                 goDown = true;
                 goUp = false;

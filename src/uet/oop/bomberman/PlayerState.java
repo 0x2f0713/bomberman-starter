@@ -5,8 +5,8 @@ public class PlayerState {
     private int remainingTime = 120;
     private int score = 0;
     private int speed = 120;
-    private int flame = 0;
-    private int bomb = 0;
+    private int flame = 2;
+    private int bomb = 3;
     private int life = 3;
 
     public int getLevel() {
