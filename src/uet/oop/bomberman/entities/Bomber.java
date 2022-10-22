@@ -75,10 +75,11 @@ public class Bomber extends Entity {
         y += dy;
         shape.setX(x);
         shape.setY(y);
-        if (dx != 0 ||  dy != 0) {
-            Sound.walk_1.play();
-            Sound.walk_1.stop();
-        }
+
+//        if (dx != 0 ||  dy != 0) {
+//            Sound.walk_1.play();
+//            Sound.walk_1.stop();
+//        }
         //System.out.println(x + " " + y);
         changeMovement(dx, dy);
     }
