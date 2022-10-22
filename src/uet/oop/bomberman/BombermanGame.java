@@ -1,5 +1,9 @@
 package uet.oop.bomberman;
 
+import static uet.oop.bomberman.UpdateFlame.updateFlame;
+import static uet.oop.bomberman.UpdateFlame.addFlame;
+import static uet.oop.bomberman.UpdateFlame.flameList;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -44,12 +48,13 @@ public class BombermanGame extends Application {
     private List<Entity> stillObjects = new ArrayList<>();
     private ArrayDeque<Bomb> bombDeque = new ArrayDeque<>();
 
-    private List<Flame> flameList = new ArrayList<>();
-    private List<Entity> obstacleObjects = new ArrayList<>();
+    public static List<Entity> obstacleObjects = new ArrayList<>();
 
     private List<Entity> boosterObjects = new ArrayList<>();
 
-    private static PlayerState state;
+    public static List<Entity> brokenBrick = new ArrayList<>();
+
+    public static PlayerState state;
 
     boolean running, goNorth, goSouth, goEast, goWest;
 
@@ -96,10 +101,6 @@ public class BombermanGame extends Application {
         // Tao scene
         scene = new Scene(root);
 
-
-
-
-
         // Them scene vao stage
         stage.setTitle("Bomberman Game");
         stage.setScene(scene);
@@ -128,6 +129,7 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
+        System.out.println(123);
         for (int i = 0; i < Level.level1.getRowCount(); i++) {
             for (int j = 0; j < Level.level1.getColumnCount(); j++) {
                 Entity object;
@@ -138,6 +140,8 @@ public class BombermanGame extends Application {
                         obstacleObjects.add(object);
                         break;
                     case '*':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
                         object = new Brick(j, i, Sprite.brick.getFxImage());
                         obstacleObjects.add(object);
                         break;
@@ -192,11 +196,27 @@ public class BombermanGame extends Application {
         int finalDx = dx;
         int finalDy = dy;
 
+        updatePlayer(finalDx, finalDy);
+
+        if (bombDeque.size() > 0) {
+            updateBomb();
+        }
+
+        if (flameList.size() > 0) {
+            updateFlame();
+            flameList.forEach(Flame::update);
+        }
+
+        updateBrick();
+    }
+
+    private void updatePlayer(int finalDx, int finalDy) {
         entities.forEach(i -> {
             if (i instanceof Bomber) {
                 for (Entity entity : obstacleObjects) {
                     Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy, i.shape.getHeight(), i.shape.getWidth());
                     if (entity.shape.intersects(shape.getBoundsInLocal())) {
+                        player.setBombermanState(EntityState.STOP);
                         return;
                     }
                 }
@@ -204,25 +224,26 @@ public class BombermanGame extends Application {
             i.update(finalDx, finalDy);
         });
 
-        if (bombDeque.size() > 0) {
-            updateBomb();
-        }
-        if (flameList.size() > 0) {
-            updateFlame();
-            flameList.forEach(Flame::update);
-        }
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         stillObjects.forEach(g -> g.render(gc));
-        obstacleObjects.forEach(g -> g.render(gc));
+        obstacleObjects.forEach(g -> {
+//            drawRectangle(gc, g.shape, Color.BLUE);
+            g.render(gc);
+        });
         entities.forEach(g -> {
             if (g instanceof Bomber) {
-                drawRectangle(gc, g.shape);
+//                drawRectangle(gc, g.shape, Color.RED);
+                g.render(gc);
             }
             g.render(gc);
         });
+
+
+
         if (bombDeque.size() > 0) {
             bombDeque.forEach(g -> g.render(gc));
         }
@@ -291,63 +312,23 @@ public class BombermanGame extends Application {
         bombDeque.forEach(Entity::update);
     }
 
-    private void addFlame(Bomb bomb) {
-        int i = 1;
-        while (i <= state.getFlame()) {
-            Flame flame1 = new Flame((bomb.getX() / 32) + i, (bomb.getY() / 32),
-                    Sprite.explosion_horizontal.getFxImage(), "right");
+    private void updateBrick() {
+        int i = 0;
+        while (i < obstacleObjects.size()) {
 
-            Flame flame2 = new Flame((bomb.getX() / 32) - i, (bomb.getY() / 32),
-                    Sprite.explosion_horizontal.getFxImage(), "left");
-
-            Flame flame3 = new Flame((bomb.getX() / 32), (bomb.getY() / 32) + i,
-                    Sprite.explosion_vertical.getFxImage(), "down");
-
-            Flame flame4 = new Flame((bomb.getX() / 32), (bomb.getY() / 32) - i,
-                    Sprite.explosion_vertical.getFxImage(), "top");
-
-            if (i != state.getFlame()) {
-                flame1.setPosition("mid");
-                flame2.setPosition("mid");
-                flame3.setPosition("mid");
-                flame4.setPosition("mid");
-            } else {
-                flame1.setPosition("last");
-                flame1.setImg(Sprite.explosion_horizontal_right_last.getFxImage());
-
-                flame2.setPosition("last");
-                flame2.setImg(Sprite.explosion_horizontal_left_last.getFxImage());
-
-                flame3.setPosition("last");
-                flame3.setImg(Sprite.explosion_vertical_down_last.getFxImage());
-
-                flame4.setPosition("last");
-                flame4.setImg(Sprite.explosion_vertical_top_last.getFxImage());
+            if (obstacleObjects.get(i) instanceof Brick && ((Brick) obstacleObjects.get(i)).isDisappear()) {
+                obstacleObjects.remove(i);
+                i--;
             }
-            flameList.add(flame1);
-            flameList.add(flame2);
-            flameList.add(flame3);
-            flameList.add(flame4);
             i++;
         }
-
-        flameList.add(new Flame((bomb.getX() / 32), (bomb.getY() / 32),
-                Sprite.bomb_exploded.getFxImage(), "center"));
+        obstacleObjects.forEach(Entity::update);
     }
 
-    private void updateFlame() {
-        int i = 0;
-        while (i < flameList.size()) {
-            if (flameList.get(i).isDisappear()) {
-                flameList.remove(0);
-            } else {
-                break;
-            }
-        }
-    }
 
-    private void drawRectangle(GraphicsContext gc, Rectangle rect){
-        gc.setFill(Color.WHITESMOKE);
+
+    public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
+        gc.setFill(color);
         gc.fillRect(rect.getX(),
                 rect.getY(),
                 rect.getWidth(),
