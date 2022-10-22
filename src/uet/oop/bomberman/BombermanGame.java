@@ -346,8 +346,8 @@ public class BombermanGame extends Application {
         }
     }
 
-    private void drawRectangle(GraphicsContext gc, Rectangle rect){
-        gc.setFill(Color.WHITESMOKE);
+    public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
+        gc.setFill(color);
         gc.fillRect(rect.getX(),
                 rect.getY(),
                 rect.getWidth(),
