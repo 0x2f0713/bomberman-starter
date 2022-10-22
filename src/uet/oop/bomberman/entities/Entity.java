@@ -23,7 +23,9 @@ public abstract class Entity {
     public Entity( int xUnit, int yUnit, Image img) {
         this.x = xUnit * Sprite.SCALED_SIZE;
         this.y = yUnit * Sprite.SCALED_SIZE;
-        this.shape = new Rectangle(xUnit * Sprite.SCALED_SIZE, yUnit * Sprite.SCALED_SIZE, 16, 16);
+        int plus = 4;
+        int subtract = plus * 2;
+        this.shape = new Rectangle(xUnit * Sprite.SCALED_SIZE + plus, yUnit * Sprite.SCALED_SIZE + plus, Sprite.SCALED_SIZE - subtract, Sprite.SCALED_SIZE - subtract);
         this.img = img;
     }
 
