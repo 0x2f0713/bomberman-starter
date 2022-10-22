@@ -221,10 +221,14 @@ public class BombermanGame extends Application {
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
-        obstacleObjects.forEach(g -> g.render(gc));
+        obstacleObjects.forEach(g -> {
+//            drawRectangle(gc, g.shape, Color.BLUE);
+            g.render(gc);
+        });
         entities.forEach(g -> {
             if (g instanceof Bomber) {
-                drawRectangle(gc, g.shape);
+//                drawRectangle(gc, g.shape, Color.RED);
+                g.render(gc);
             }
             g.render(gc);
         });
