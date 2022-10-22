@@ -40,6 +40,14 @@ public class Bomber extends Entity {
         return goLeft;
     }
 
+    public EntityState getBombermanState() {
+        return BombermanState;
+    }
+
+    public void setBombermanState(EntityState bombermanState) {
+        BombermanState = bombermanState;
+    }
+
     public void setGoLeft(boolean goLeft) {
         this.goLeft = goLeft;
     }
@@ -54,7 +62,7 @@ public class Bomber extends Entity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
-        shape = new Rectangle(33, 33, 12 / 16.0 * Sprite.SCALED_SIZE, 12 / 16.0 * Sprite.SCALED_SIZE);
+        shape = new Rectangle(32, 32, 28 ,16);
         BombermanState = EntityState.STOP;
         goUp = goDown = goLeft = false;
         goRight = true;
