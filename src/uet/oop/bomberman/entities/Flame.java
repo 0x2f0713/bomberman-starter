@@ -10,7 +10,7 @@ public class Flame extends Entity{
     private String position;
     private String direction;
     private int timeAnimationChange;
-    private final int timeToDisappear = 8;
+    private final int timeToDisappear = 12;
     private boolean disappear = false;
 
     public Flame(int xUnit, int yUnit, Image img, String direction) {
@@ -37,23 +37,23 @@ public class Flame extends Entity{
 
     private void updateHorizontal() {
         if (position.equals("mid")) {
-            if (timeAnimationChange == 2) {
+            if (timeAnimationChange == 4) {
                 img = Sprite.explosion_horizontal1.getFxImage();
-            } else if (timeAnimationChange == 4) {
+            } else if (timeAnimationChange == 6) {
                 img = Sprite.explosion_horizontal2.getFxImage();
             }
         } else if (position.equals("last")) {
             if (direction.equals("left")) {
-                if (timeAnimationChange == 2) {
+                if (timeAnimationChange == 4) {
                     img = Sprite.explosion_horizontal_left_last1.getFxImage();
-                } else if (timeAnimationChange == 4) {
+                } else if (timeAnimationChange == 6) {
                     img = Sprite.explosion_horizontal_left_last2.getFxImage();
                 }
             }
             else if (direction.equals("right")) {
-                if (timeAnimationChange == 2) {
+                if (timeAnimationChange == 4) {
                     img = Sprite.explosion_horizontal_right_last1.getFxImage();
-                } else if (timeAnimationChange == 4) {
+                } else if (timeAnimationChange == 6) {
                     img = Sprite.explosion_horizontal_right_last2.getFxImage();
                 }
             }
@@ -63,23 +63,23 @@ public class Flame extends Entity{
 
     private void updateVertical() {
         if (position.equals("mid")) {
-            if (timeAnimationChange == 2) {
+            if (timeAnimationChange == 4) {
                 img = Sprite.explosion_vertical1.getFxImage();
-            } else if (timeAnimationChange == 4) {
+            } else if (timeAnimationChange == 6) {
                 img = Sprite.explosion_vertical2.getFxImage();
             }
         } else if (position.equals("last")) {
             if (direction.equals("top")) {
-                if (timeAnimationChange == 2) {
+                if (timeAnimationChange == 4) {
                     img = Sprite.explosion_vertical_top_last1.getFxImage();
-                } else if (timeAnimationChange == 4) {
+                } else if (timeAnimationChange == 6) {
                     img = Sprite.explosion_vertical_top_last2.getFxImage();
                 }
             }
             else if (direction.equals("down")) {
-                if (timeAnimationChange == 2) {
+                if (timeAnimationChange == 4) {
                     img = Sprite.explosion_vertical_down_last1.getFxImage();
-                } else if (timeAnimationChange == 4) {
+                } else if (timeAnimationChange == 6) {
                     img = Sprite.explosion_vertical_down_last2.getFxImage();
                 }
             }
@@ -88,9 +88,9 @@ public class Flame extends Entity{
     }
 
     private void updateCenter() {
-        if (timeAnimationChange == 2) {
+        if (timeAnimationChange == 4) {
             img = Sprite.bomb_exploded1.getFxImage();
-        } else if (timeAnimationChange == 4) {
+        } else if (timeAnimationChange == 6) {
             img = Sprite.bomb_exploded2.getFxImage();
         }
     }
