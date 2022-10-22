@@ -71,9 +71,10 @@ public class Bomber extends Entity {
             BombermanState = EntityState.MOVE_1;
         }
         x += dx;
+        y += dy;
         shape.setX(x);
         shape.setY(y);
-        y += dy;
+
         //System.out.println(x + " " + y);
         changeMovement(dx, dy);
     }
