@@ -55,7 +55,7 @@ public class Bomber extends Entity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
-        shape = new Rectangle(33, 33, 12 / 16.0 * Sprite.SCALED_SIZE, 12 / 16.0 * Sprite.SCALED_SIZE);
+        shape = new Rectangle(this.getX() + 4, this.getY() + 5, 14 * Sprite.SCALED_SIZE / 16, 12 * Sprite.SCALED_SIZE / 16);
         BombermanState = EntityState.STOP;
         goUp = goDown = goLeft = false;
         goRight = true;
