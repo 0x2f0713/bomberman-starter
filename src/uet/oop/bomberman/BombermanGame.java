@@ -189,19 +189,24 @@ public class BombermanGame extends Application {
             dy *= 1.5;
         }
 
-        int finalDx = dx;
-        int finalDy = dy;
+        final int[] finalDx = {dx};
+        final int[] finalDy = {dy};
 
         entities.forEach(i -> {
             if (i instanceof Bomber) {
                 for (Entity entity : obstacleObjects) {
-                    Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy, i.shape.getHeight(), i.shape.getWidth());
-                    if (entity.shape.intersects(shape.getBoundsInLocal())) {
-                        return;
+                    Rectangle shape = new Rectangle(i.shape.getX() + finalDx[0], i.shape.getY() + finalDy[0], i.shape.getHeight(), i.shape.getWidth());
+                    if (shape.intersects(entity.shape.getBoundsInLocal())) {
+                        shape = new Rectangle(i.shape.getX() + Math.min(finalDx[0], 2), i.shape.getY() + Math.min(finalDy[0], 2), i.shape.getHeight(), i.shape.getWidth());
+                        if (shape.intersects(entity.shape.getBoundsInLocal())) {
+                            return;
+                        }
+                        finalDx[0] = Math.min(finalDx[0], 2);
+                        finalDy[0] = Math.min(finalDy[0], 2);
                     }
                 }
             }
-            i.update(finalDx, finalDy);
+            i.update(finalDx[0], finalDy[0]);
         });
 
         if (bombDeque.size() > 0) {
