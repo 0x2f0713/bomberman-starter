@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities;
 
-
+import static uet.oop.bomberman.BombermanGame.entities;
+import static uet.oop.bomberman.BombermanGame.state;
 import javafx.scene.image.Image;
 
 public class FlameItem extends Booster {
@@ -11,7 +12,10 @@ public class FlameItem extends Booster {
 
     @Override
     public void update() {
-
+        if (shape.intersects(entities.get(0).shape.getLayoutBounds()) && entities.get(0) instanceof  Bomber) {
+            state.increaseFlame();
+            disappear = true;
+        }
     }
 
     @Override

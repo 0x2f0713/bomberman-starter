@@ -149,15 +149,18 @@ public class BombermanGame extends Application {
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
-                        entities.add((MovingEntity) object);
+                        //entities.add((MovingEntity) object);
                         break;
                     case '2':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
-                        entities.add((MovingEntity) object);
+                        //entities.add((MovingEntity) object);
                         break;
                     case 'b':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+
                         object = new BombItem(j, i, Sprite.powerup_bombs.getFxImage());
                         boosterObjects.add((Booster) object);
 
@@ -165,6 +168,9 @@ public class BombermanGame extends Application {
                         obstacleObjects.add(object);
                         break;
                     case 'f':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+
                         object = new FlameItem(j, i, Sprite.powerup_flames.getFxImage());
                         boosterObjects.add((Booster) object);
 
@@ -172,6 +178,9 @@ public class BombermanGame extends Application {
                         obstacleObjects.add(object);
                         break;
                     case 's':
+                        object = new Grass(j, i, Sprite.grass.getFxImage());
+                        stillObjects.add(object);
+
                         object = new SpeedItem(j, i, Sprite.powerup_speed.getFxImage());
                         boosterObjects.add((Booster) object);
 
@@ -221,7 +230,7 @@ public class BombermanGame extends Application {
         updateBrick();
 
         if (boosterObjects.size() > 0) {
-            boosterObjects.forEach(Booster::update);
+            updateBooster();
         }
     }
 
@@ -367,6 +376,17 @@ public class BombermanGame extends Application {
         obstacleObjects.forEach(Entity::update);
     }
 
+    private void updateBooster() {
+        List<Booster> tmp = new ArrayList<>();
+        boosterObjects.forEach(Booster::update);
+        boosterObjects.forEach(i -> {
+            if (i.isDisappear()) {
+                tmp.add(i);
+            }
+        });
+
+        boosterObjects.removeAll(tmp);
+    }
 
     public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
         gc.setFill(color);

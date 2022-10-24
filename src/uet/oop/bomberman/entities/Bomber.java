@@ -64,7 +64,7 @@ public class Bomber extends MovingEntity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
-        shape = new Rectangle(25, 32, 30 ,20);
+        shape = new Rectangle(32, 32, 30 ,20);
         BombermanState = EntityState.ALIVE;
         goUp = goDown = goLeft = false;
         goRight = true;

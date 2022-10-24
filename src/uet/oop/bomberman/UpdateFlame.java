@@ -61,14 +61,6 @@ public class UpdateFlame {
                 }
             });
 
-            entities.forEach(g -> {
-                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
-                    g.setState(EntityState.DIE);
-                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
-                        g instanceof Bomber && g.getState() != EntityState.GOD) {
-                    g.setState(EntityState.DIE);
-                }
-            });
 
             i++;
         }
@@ -98,14 +90,6 @@ public class UpdateFlame {
 
             });
 
-            entities.forEach(g -> {
-                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
-                    g.setState(EntityState.DIE);
-                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
-                        g instanceof Bomber && g.getState() != EntityState.GOD) {
-                    g.setState(EntityState.DIE);
-                }
-            });
 
             i++;
         }
@@ -135,14 +119,6 @@ public class UpdateFlame {
 
             });
 
-            entities.forEach(g -> {
-                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
-                    g.setState(EntityState.DIE);
-                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
-                        g instanceof Bomber && g.getState() != EntityState.GOD) {
-                    g.setState(EntityState.DIE);
-                }
-            });
 
             i++;
         }
@@ -172,14 +148,6 @@ public class UpdateFlame {
 
             });
 
-            entities.forEach(g -> {
-                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
-                    g.setState(EntityState.DIE);
-                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
-                        g instanceof Bomber && g.getState() != EntityState.GOD) {
-                    g.setState(EntityState.DIE);
-                }
-            });
 
             i++;
         }
