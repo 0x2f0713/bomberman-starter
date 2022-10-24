@@ -9,6 +9,8 @@ public class PlayerState {
     private int bomb = 3;
     private int life = 3;
 
+    public boolean isPlaying = true;
+
     public int getLevel() {
         return level;
     }
