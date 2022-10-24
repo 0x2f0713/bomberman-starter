@@ -16,6 +16,7 @@ import static uet.oop.bomberman.BombermanGame.retrogamingFont;
 public class HUD {
 
     private GameText levelText;
+    private GameText isPausingText;
     private GameText timeText;
     private GameText scoreText;
     private GameText speedText;
@@ -36,8 +37,11 @@ public class HUD {
     public HUD(Font font, PlayerState state) {
         setLevelText(new GameText(10, 50, font, "LEVEL %d", state.getLevel()));
         setTimeText(new GameText(10, 50, font, "TIME %d", state.getRemainingTime()));
+        setIsPausingText(new GameText(10, 50, font, "%s", state.isPlaying ? "" : "PAUSING"));
         row1 = createRow(
                 this.levelText,
+                spacer(),
+                this.isPausingText,
                 spacer(),
                 this.timeText
         );
@@ -90,6 +94,10 @@ public class HUD {
 
     public void updateLevel(int newLevel) {
         levelText.updateText(newLevel);
+    }
+
+    public void updateIsPausing(boolean isPausing) {
+        isPausingText.updateText(isPausing ? "PAUSING" : "");
     }
 
     public void updateRemainingTime(int newRemainingTime) {
@@ -169,5 +177,13 @@ public class HUD {
 
     public void setLifeText(GameText lifeText) {
         this.lifeText = lifeText;
+    }
+
+    public GameText getIsPausingText() {
+        return isPausingText;
+    }
+
+    public void setIsPausingText(GameText isPausingText) {
+        this.isPausingText = isPausingText;
     }
 }
