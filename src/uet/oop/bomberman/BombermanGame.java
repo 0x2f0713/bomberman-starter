@@ -115,8 +115,10 @@ public class BombermanGame extends Application {
                 if (now - lastUpdate > 70000000) {
                     keyPressedListener();
                     keyReleasedListener();
-                    update();
-                    render();
+                    if (state.isPlaying) {
+                        update();
+                        render();
+                    }
                     lastUpdate = now;
                 }
             }
@@ -244,6 +246,10 @@ public class BombermanGame extends Application {
     private void keyPressedListener() {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
+                case P:
+                    state.isPlaying = !state.isPlaying;
+                    hud.updateIsPausing(!state.isPlaying);
+                    break;
                 case UP:
                     goNorth = true;
                     break;
