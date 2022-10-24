@@ -257,6 +257,10 @@ public class BombermanGame extends Application {
     private void keyPressedListener() {
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
+                case P:
+                    state.isPlaying = !state.isPlaying;
+                    hud.updateIsPausing(!state.isPlaying);
+                    break;
                 case UP:
                     goNorth = true;
                     break;
