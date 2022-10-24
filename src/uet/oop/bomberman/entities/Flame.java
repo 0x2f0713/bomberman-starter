@@ -11,7 +11,6 @@ public class Flame extends Entity{
     private String direction;
     private int timeAnimationChange;
     private final int timeToDisappear = 8;
-    private int timeCount;
     private boolean disappear = false;
 
     public Flame(int xUnit, int yUnit, Image img, String direction) {
@@ -26,7 +25,6 @@ public class Flame extends Entity{
         this.direction = direction;
 
         timeAnimationChange = 0;
-        timeCount = 0;
     }
 
     public void setPosition(String position) {

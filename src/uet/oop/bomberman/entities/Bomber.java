@@ -41,6 +41,14 @@ public class Bomber extends Entity {
         return goLeft;
     }
 
+    public EntityState getBombermanState() {
+        return BombermanState;
+    }
+
+    public void setBombermanState(EntityState bombermanState) {
+        BombermanState = bombermanState;
+    }
+
     public void setGoLeft(boolean goLeft) {
         this.goLeft = goLeft;
     }
