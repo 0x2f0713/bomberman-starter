@@ -12,11 +12,11 @@ import uet.oop.bomberman.graphics.Sprite;
 
 import java.awt.*;
 
-public class Bomber extends Entity {
-    private boolean goUp;
-    private boolean goDown;
-    private boolean goLeft;
-    private boolean goRight;
+public class Bomber extends MovingEntity {
+
+    private int GodModeCount = 50;
+    private final int firstChange = 2;
+    private final int secondChange = 6;
 
     public boolean collisionOn = false;
     private EntityState BombermanState;
@@ -41,11 +41,13 @@ public class Bomber extends Entity {
         return goLeft;
     }
 
-    public EntityState getBombermanState() {
+    @Override
+    public EntityState getState() {
         return BombermanState;
     }
 
-    public void setBombermanState(EntityState bombermanState) {
+    @Override
+    public void setState(EntityState bombermanState) {
         BombermanState = bombermanState;
     }
 
@@ -63,124 +65,98 @@ public class Bomber extends Entity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
-        shape = new Rectangle(this.getX() + 4, this.getY() + 5, 14 * Sprite.SCALED_SIZE / 16, 12 * Sprite.SCALED_SIZE / 16);
-        BombermanState = EntityState.STOP;
+        shape = new Rectangle(25, 32, 30 ,20);
+        BombermanState = EntityState.ALIVE;
         goUp = goDown = goLeft = false;
         goRight = true;
     }
 
     @Override
     public void update() {
-
+        if (BombermanState == EntityState.GOD) {
+            GodModeCount--;
+            if (GodModeCount == 0) {
+                BombermanState = EntityState.ALIVE;
+            }
+        }
     }
 
     @Override
     public void update(int dx, int dy) {
-        if (BombermanState == EntityState.STOP) {
-            BombermanState = EntityState.MOVE_1;
-        }
-        x += dx;
-        y += dy;
-        shape.setX(x);
-        shape.setY(y);
-
+        if (BombermanState != EntityState.DIE) {
+            x += dx;
+            y += dy;
+            shape.setX(x);
+            shape.setY(y + 3);
 //        if (dx != 0 ||  dy != 0) {
 //            Sound.walk_1.play();
 //            Sound.walk_1.stop();
 //        }
-        //System.out.println(x + " " + y);
-        changeMovement(dx, dy);
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+            //System.out.println(x + " " + y);
+            changeMovement(dx, dy);
+        } else {
+            if (timeDieAnimation == 0) {
+                img = Sprite.player_dead1.getFxImage();
+            } else if(timeDieAnimation == 10) {
+                img = Sprite.player_dead2.getFxImage();
+            } else if (timeDieAnimation == 20) {
+                img = Sprite.player_dead3.getFxImage();
+            } else if (timeDieAnimation == 30) {
+                disappear = true;
+            }
+            timeDieAnimation++;
+        }
     }
 
     private void changeMovement(int dx, int dy) {
-        if (dx != 0 && dy == 0) {
+        if (dx != 0) {
+            timeAnimationChange++;
+            goUp = false;
+            goDown = false;
             if (dx > 0) {
                 goRight = true;
                 goLeft = false;
-                goUp = false;
-                goDown = false;
-                if (BombermanState == EntityState.MOVE_1) {
+                if (timeAnimationChange == firstChange) {
                     img = Sprite.player_right_1.getFxImage();
-                    BombermanState = EntityState.MOVE_2;
-                } else if (BombermanState == EntityState.MOVE_2) {
+                } else if (timeAnimationChange == secondChange) {
                     img = Sprite.player_right_2.getFxImage();
-                    BombermanState = EntityState.MOVE_1;
+                    timeAnimationChange = -2;
                 }
             } else {
                 goLeft = true;
                 goRight = false;
-                goUp = false;
-                goDown = false;
-                if (BombermanState == EntityState.MOVE_1) {
+                if (timeAnimationChange == firstChange) {
                     img = Sprite.player_left_1.getFxImage();
-                    BombermanState = EntityState.MOVE_2;
-                } else if (BombermanState == EntityState.MOVE_2) {
+
+                } else if (timeAnimationChange == secondChange) {
                     img = Sprite.player_left_2.getFxImage();
-                    BombermanState = EntityState.MOVE_1;
+                    timeAnimationChange = -2;
                 }
             }
-        } else if (dy != 0 && dx == 0) {
+        } else if (dy != 0) {
+            timeAnimationChange++;
+            goLeft = false;
+            goRight = false;
             if (dy > 0) {
                 goDown = true;
                 goUp = false;
-                goLeft = false;
-                goRight = false;
-                if (BombermanState == EntityState.MOVE_1) {
+                if (timeAnimationChange == firstChange) {
                     img = Sprite.player_down_1.getFxImage();
-                    BombermanState = EntityState.MOVE_2;
-                } else if (BombermanState == EntityState.MOVE_2) {
+                } else if (timeAnimationChange == secondChange) {
                     img = Sprite.player_down_2.getFxImage();
-                    BombermanState = EntityState.MOVE_1;
+                    timeAnimationChange = -2;
                 }
             } else {
                 goUp = true;
                 goDown = false;
-                goLeft = false;
-                goRight = false;
-                if (BombermanState == EntityState.MOVE_1) {
+                if (timeAnimationChange == firstChange) {
                     img = Sprite.player_up_1.getFxImage();
-                    BombermanState = EntityState.MOVE_2;
-                } else if (BombermanState == EntityState.MOVE_2) {
+                } else if (timeAnimationChange == secondChange) {
                     img = Sprite.player_up_2.getFxImage();
-                    BombermanState = EntityState.MOVE_1;
+                    timeAnimationChange = -2;
                 }
             }
-        } else if (dy != 0) {
-            if (dx > 0) {
-                goRight = true;
-                goLeft = false;
-                goUp = false;
-                goDown = false;
-                if (BombermanState == EntityState.MOVE_1) {
-                    img = Sprite.player_right_1.getFxImage();
-                    BombermanState = EntityState.MOVE_2;
-                } else if (BombermanState == EntityState.MOVE_2) {
-                    img = Sprite.player_right_2.getFxImage();
-                    BombermanState = EntityState.MOVE_1;
-                }
-            } else {
-                goLeft = true;
-                goRight = false;
-                goUp = false;
-                goDown = false;
-                if (BombermanState == EntityState.MOVE_1) {
-                    img = Sprite.player_left_1.getFxImage();
-                    BombermanState = EntityState.MOVE_2;
-                } else if (BombermanState == EntityState.MOVE_2) {
-                    img = Sprite.player_left_2.getFxImage();
-                    BombermanState = EntityState.MOVE_1;
-                }
-            }
-        } else {
-            BombermanState = EntityState.STOP;
+        }  else {
             if (goRight) {
                 img = Sprite.player_right.getFxImage();
             }

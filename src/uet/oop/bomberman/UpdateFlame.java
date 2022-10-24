@@ -1,17 +1,13 @@
 package uet.oop.bomberman;
 
-import uet.oop.bomberman.entities.Bomb;
-import uet.oop.bomberman.entities.Brick;
-import uet.oop.bomberman.entities.Flame;
-import uet.oop.bomberman.entities.Wall;
+import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static uet.oop.bomberman.BombermanGame.state;
-import static uet.oop.bomberman.BombermanGame.obstacleObjects;
+import static uet.oop.bomberman.BombermanGame.*;
 
 public class UpdateFlame {
 
@@ -34,8 +30,14 @@ public class UpdateFlame {
         updateDown(bomb);
         updateLeft(bomb);
         updateRight(bomb);
-        flameList.add(new Flame((bomb.getX() / 32), (bomb.getY() / 32),
-                Sprite.bomb_exploded.getFxImage(), "center"));
+        Flame flame = new Flame((bomb.getX() / 32), (bomb.getY() / 32),
+                Sprite.bomb_exploded.getFxImage(), "center");
+        flameList.add(flame);
+        entities.forEach(g -> {
+            if (g.shape.intersects(flame.shape.getLayoutBounds())) {
+                g.setState(EntityState.DIE);
+            }
+        });
     }
 
     private static void updateTop(Bomb bomb) {
@@ -49,7 +51,6 @@ public class UpdateFlame {
                 flame.setImg(Sprite.explosion_vertical_top_last.getFxImage());
             }
             flameList.add(flame);
-
             obstacleObjects.forEach(g -> {
                 if (g.shape.intersects(flame.shape.getLayoutBounds())) {
                     if (g instanceof Brick) {
@@ -58,7 +59,15 @@ public class UpdateFlame {
                     flameList.remove(flameList.size()-1);
                     stop.set(true);
                 }
+            });
 
+            entities.forEach(g -> {
+                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
+                    g.setState(EntityState.DIE);
+                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
+                        g instanceof Bomber && g.getState() != EntityState.GOD) {
+                    g.setState(EntityState.DIE);
+                }
             });
 
             i++;
@@ -88,6 +97,16 @@ public class UpdateFlame {
                 }
 
             });
+
+            entities.forEach(g -> {
+                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
+                    g.setState(EntityState.DIE);
+                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
+                        g instanceof Bomber && g.getState() != EntityState.GOD) {
+                    g.setState(EntityState.DIE);
+                }
+            });
+
             i++;
         }
     }
@@ -115,6 +134,16 @@ public class UpdateFlame {
                 }
 
             });
+
+            entities.forEach(g -> {
+                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
+                    g.setState(EntityState.DIE);
+                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
+                        g instanceof Bomber && g.getState() != EntityState.GOD) {
+                    g.setState(EntityState.DIE);
+                }
+            });
+
             i++;
         }
     }
@@ -142,7 +171,18 @@ public class UpdateFlame {
                 }
 
             });
+
+            entities.forEach(g -> {
+                if (g.shape.intersects(flame.shape.getLayoutBounds()) && g instanceof Enemy) {
+                    g.setState(EntityState.DIE);
+                } else if(g.shape.intersects(flame.shape.getLayoutBounds()) &&
+                        g instanceof Bomber && g.getState() != EntityState.GOD) {
+                    g.setState(EntityState.DIE);
+                }
+            });
+
             i++;
         }
     }
+
 }

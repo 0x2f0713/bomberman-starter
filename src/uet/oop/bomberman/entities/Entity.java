@@ -37,6 +37,14 @@ public abstract class Entity {
         return y;
     }
 
+    public int getXUnit() {
+        return x /32;
+    }
+
+    public int getYUnit() {
+        return y /32;
+    }
+
     public void setImg(Image img) {
         this.img = img;
     }
@@ -48,4 +56,5 @@ public abstract class Entity {
 
     public abstract void update(int dx, int dy);
     public abstract void update(int dx, int dy, Image img);
+
 }

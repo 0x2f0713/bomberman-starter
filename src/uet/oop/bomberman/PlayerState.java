@@ -66,4 +66,8 @@ public class PlayerState {
     public void setLife(int life) {
         this.life = life;
     }
+
+    public void minusLife() {
+        life--;
+    }
 }

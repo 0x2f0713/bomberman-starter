@@ -6,17 +6,12 @@ import static uet.oop.bomberman.UpdateFlame.flameList;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -29,11 +24,11 @@ import uet.oop.bomberman.utils.Level;
 import java.util.*;
 
 public class BombermanGame extends Application {
-    private Bomber player;
 
     public static int currentBomb = 0;
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
+    private Bomber player;
 
     public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
 
@@ -44,13 +39,14 @@ public class BombermanGame extends Application {
     private Canvas canvas;
     private GridPane hudPane;
     private GridPane layoutPane;
-    private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
-    private ArrayDeque<Bomb> bombDeque = new ArrayDeque<>();
+
+    public static List<MovingEntity> entities = new ArrayList<>();
+    public static List<Entity> stillObjects = new ArrayList<>();
+    public static ArrayDeque<Bomb> bombDeque = new ArrayDeque<>();
 
     public static List<Entity> obstacleObjects = new ArrayList<>();
 
-    private List<Entity> boosterObjects = new ArrayList<>();
+    public static List<Booster> boosterObjects = new ArrayList<>();
 
     public static List<Entity> brokenBrick = new ArrayList<>();
 
@@ -60,12 +56,12 @@ public class BombermanGame extends Application {
 
     private Scene scene;
     public void init() {
+        state = new PlayerState();
         player = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(player);
     }
 
     public static void main(String[] args) {
-        state = new PlayerState();
         Application.launch(BombermanGame.class);
     }
 
@@ -101,10 +97,6 @@ public class BombermanGame extends Application {
         // Tao scene
         scene = new Scene(root);
 
-
-
-
-
         // Them scene vao stage
         stage.setTitle("Bomberman Game");
         stage.setScene(scene);
@@ -117,7 +109,7 @@ public class BombermanGame extends Application {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
-                if (now - lastUpdate > 70000000) {
+                if (now - lastUpdate > 36000000) {
                     keyPressedListener();
                     keyReleasedListener();
                     if (state.isPlaying) {
@@ -159,20 +151,34 @@ public class BombermanGame extends Application {
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
+                        entities.add((MovingEntity) object);
                         break;
                     case '2':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
+                        entities.add((MovingEntity) object);
                         break;
                     case 'b':
                         object = new BombItem(j, i, Sprite.powerup_bombs.getFxImage());
+                        boosterObjects.add((Booster) object);
+
+                        object = new Brick(j, i, Sprite.brick.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     case 'f':
                         object = new FlameItem(j, i, Sprite.powerup_flames.getFxImage());
+                        boosterObjects.add((Booster) object);
+
+                        object = new Brick(j, i, Sprite.brick.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     case 's':
                         object = new SpeedItem(j, i, Sprite.powerup_speed.getFxImage());
+                        boosterObjects.add((Booster) object);
+
+                        object = new Brick(j, i, Sprite.brick.getFxImage());
+                        obstacleObjects.add(object);
                         break;
                     default:
                         object = new Grass(j, i, Sprite.grass.getFxImage());
@@ -187,7 +193,7 @@ public class BombermanGame extends Application {
     public void update() {
         int dx = 0, dy = 0;
 
-        final int DEFAULT_SPEED = 10;
+        final int DEFAULT_SPEED = 5;
 
         if (goNorth) dy -= DEFAULT_SPEED;
         if (goSouth) dy += DEFAULT_SPEED;
@@ -201,7 +207,9 @@ public class BombermanGame extends Application {
         int finalDx = dx;
         int finalDy = dy;
 
-        updatePlayer(finalDx, finalDy);
+        if (entities.size() > 0) {
+            updateMovingEntity(finalDx, finalDy);
+        }
 
         if (bombDeque.size() > 0) {
             updateBomb();
@@ -213,15 +221,33 @@ public class BombermanGame extends Application {
         }
 
         updateBrick();
+
+        if (boosterObjects.size() > 0) {
+            boosterObjects.forEach(Booster::update);
+        }
     }
 
-    private void updatePlayer(int finalDx, int finalDy) {
+    private void updateMovingEntity(int finalDx, int finalDy) {
+        if (entities.get(0).isDisappear()) {
+            state.minusLife();
+            entities.remove(0);
+            if (state.getLife() > 0) {
+                player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+                player.setState(EntityState.GOD);
+                entities.add(0, player);
+            } else {
+                System.out.println(123);
+            }
+        }
+
+        entities.removeIf(movingEntity -> movingEntity.isDisappear() && movingEntity instanceof Enemy);
+
         entities.forEach(i -> {
             if (i instanceof Bomber) {
                 for (Entity entity : obstacleObjects) {
-                    Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy, i.shape.getHeight(), i.shape.getWidth());
+                    Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy,
+                            i.shape.getHeight(), i.shape.getWidth());
                     if (entity.shape.intersects(shape.getBoundsInLocal())) {
-                        player.setBombermanState(EntityState.STOP);
                         return;
                     }
                 }
@@ -229,61 +255,75 @@ public class BombermanGame extends Application {
             i.update(finalDx, finalDy);
         });
 
+        entities.forEach(Entity::update);
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
+
+        if (boosterObjects.size() > 0) {
+            boosterObjects.forEach(g -> g.render(gc));
+        }
+
         obstacleObjects.forEach(g -> {
 //            drawRectangle(gc, g.shape, Color.BLUE);
             g.render(gc);
         });
-        entities.forEach(g -> {
-            if (g instanceof Bomber) {
+        if (entities.size() > 0) {
+            entities.forEach(g -> {
 //                drawRectangle(gc, g.shape, Color.RED);
                 g.render(gc);
-            }
-            g.render(gc);
-        });
+            });
+        }
+
+
+
         if (bombDeque.size() > 0) {
             bombDeque.forEach(g -> g.render(gc));
         }
 
         if (flameList.size() > 0) {
-            flameList.forEach(g -> g.render(gc));
+            flameList.forEach(g -> {
+//                drawRectangle(gc, g.shape, Color.RED);
+                g.render(gc);
+            });
         }
     }
 
     private void keyPressedListener() {
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case P:
-                    state.isPlaying = !state.isPlaying;
-                    hud.updateIsPausing(!state.isPlaying);
-                    break;
-                case UP:
-                    goNorth = true;
-                    break;
-                case DOWN:
-                    goSouth = true;
-                    break;
-                case LEFT:
-                    goWest = true;
-                    break;
-                case RIGHT:
-                    goEast = true;
-                    break;
-                case SHIFT:
-                    running = true;
-                    break;
-                case SPACE:
-                    if (currentBomb < state.getBomb()) {
-                        Bomb bomb = new Bomb((player.getX() + 14) / 32, (player.getY() + 14) / 32, Sprite.bomb.getFxImage());
-                        bombDeque.offerLast(bomb);
-                        currentBomb++;
-                    }
-            }
-        });
+        if (player.getState() != EntityState.DIE) {
+            scene.setOnKeyPressed(event -> {
+                switch (event.getCode()) {
+                    case P:
+                        state.isPlaying = !state.isPlaying;
+                        hud.updateIsPausing(!state.isPlaying);
+                        break;
+                    case UP:
+                        goNorth = true;
+                        break;
+                    case DOWN:
+                        goSouth = true;
+                        break;
+                    case LEFT:
+                        goWest = true;
+                        break;
+                    case RIGHT:
+                        goEast = true;
+                        break;
+                    case SHIFT:
+                        running = true;
+                        break;
+                    case SPACE:
+                        if (currentBomb < state.getBomb() && player.getState() != EntityState.DIE) {
+                            Bomb bomb = new Bomb((player.getX() + 10) / 32, (player.getY() + 10) / 32, Sprite.bomb.getFxImage());
+                            bombDeque.offerLast(bomb);
+                            currentBomb++;
+                        }
+                }
+
+            });
+        }
     }
 
     private void keyReleasedListener() {
@@ -330,7 +370,7 @@ public class BombermanGame extends Application {
         obstacleObjects.forEach(Entity::update);
     }
 
-    public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color) {
+    public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
         gc.setFill(color);
         gc.fillRect(rect.getX(),
                 rect.getY(),

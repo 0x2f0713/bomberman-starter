@@ -18,9 +18,9 @@ public class Brick extends Entity {
         if (Break) {
             if (timeAnimationChange == 0) {
                 img = Sprite.brick_exploded.getFxImage();
-            } else if (timeAnimationChange == 2) {
-                img = Sprite.brick_exploded1.getFxImage();
             } else if (timeAnimationChange == 4) {
+                img = Sprite.brick_exploded1.getFxImage();
+            } else if (timeAnimationChange == 8) {
                 img = Sprite.brick_exploded2.getFxImage();
                 Disappear = true;
             }
