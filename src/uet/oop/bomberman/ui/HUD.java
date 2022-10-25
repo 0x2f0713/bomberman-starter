@@ -11,8 +11,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import uet.oop.bomberman.PlayerState;
 
-import static uet.oop.bomberman.BombermanGame.retrogamingFont;
-
 public class HUD {
 
     private GameText levelText;
@@ -86,11 +84,11 @@ public class HUD {
         row2.setMinWidth(width);
     }
 
-    public Text text(double v, double v1, String s) {
-        Text _text = new Text(v, v1, s);
-        _text.setFont(retrogamingFont);
-        return _text;
-    }
+//    public Text text(double v, double v1, String s) {
+//        Text _text = new Text(v, v1, s);
+//        _text.setFont(RetroGamingFonts.s);
+//        return _text;
+//    }
 
     public void updateLevel(int newLevel) {
         levelText.updateText(newLevel);
