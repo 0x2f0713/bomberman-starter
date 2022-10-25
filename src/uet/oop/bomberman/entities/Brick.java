@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Brick extends Entity {
@@ -11,6 +12,10 @@ public class Brick extends Entity {
     public Brick(int x, int y, Image img) {
         super(x, y, img);
         Disappear = Break = false;
+        int plus = 6;
+        int subtract = plus * 2;
+        this.shape = new Rectangle(x * Sprite.SCALED_SIZE + plus, y * Sprite.SCALED_SIZE,
+                Sprite.SCALED_SIZE - subtract, Sprite.SCALED_SIZE - 2);
     }
 
     @Override

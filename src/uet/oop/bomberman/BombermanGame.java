@@ -144,6 +144,7 @@ public class BombermanGame extends Application {
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Portal(j, i, Sprite.portal.getFxImage());
+                        stillObjects.add(object);
                         break;
                     case '1':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
@@ -187,6 +188,7 @@ public class BombermanGame extends Application {
                         object = new Brick(j, i, Sprite.brick.getFxImage());
                         obstacleObjects.add(object);
                         break;
+
                     default:
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
@@ -271,16 +273,20 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
 
         if (boosterObjects.size() > 0) {
-            boosterObjects.forEach(g -> g.render(gc));
+            boosterObjects.forEach(g -> {
+//                drawRectangle(gc, g.shape, Color.GREEN);
+                g.render(gc);
+            });
         }
 
         obstacleObjects.forEach(g -> {
 //            drawRectangle(gc, g.shape, Color.BLUE);
             g.render(gc);
         });
+
         if (entities.size() > 0) {
             entities.forEach(g -> {
-//                drawRectangle(gc, g.shape, Color.RED);
+                drawRectangle(gc, g.shape, Color.RED);
                 g.render(gc);
             });
         }
@@ -288,7 +294,6 @@ public class BombermanGame extends Application {
 
 
         if (bombDeque.size() > 0) {
-
             bombDeque.forEach(g -> g.render(gc));
         }
 

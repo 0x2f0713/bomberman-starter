@@ -64,7 +64,7 @@ public class Bomber extends MovingEntity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
-        shape = new Rectangle(32, 32, 30 ,20);
+        shape = new Rectangle(32, 32, 23 ,27);
         BombermanState = EntityState.ALIVE;
         goUp = goDown = goLeft = false;
         goRight = true;
@@ -85,8 +85,8 @@ public class Bomber extends MovingEntity {
         if (BombermanState != EntityState.DIE) {
             x += dx;
             y += dy;
-            shape.setX(x);
-            shape.setY(y + 3);
+            shape.setX(x - 2);
+            shape.setY(y + 5);
             //System.out.println(x + " " + y);
             changeMovement(dx, dy);
         } else {
