@@ -16,7 +16,7 @@ public class Booster extends Entity {
         int plus = 4;
         int subtract = plus * 2;
         this.shape = new Rectangle(xUnit * Sprite.SCALED_SIZE + 10, yUnit * Sprite.SCALED_SIZE + 4,
-                Sprite.SCALED_SIZE - 10, Sprite.SCALED_SIZE - subtract);
+                Sprite.SCALED_SIZE - 18, Sprite.SCALED_SIZE - subtract);
     }
 
     @Override
