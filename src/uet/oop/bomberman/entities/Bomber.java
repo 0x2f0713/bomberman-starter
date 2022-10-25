@@ -86,7 +86,7 @@ public class Bomber extends MovingEntity {
             x += dx;
             y += dy;
             shape.setX(x - 2);
-            shape.setY(y + 5);
+            shape.setY(y + 3);
             //System.out.println(x + " " + y);
             changeMovement(dx, dy);
         } else {

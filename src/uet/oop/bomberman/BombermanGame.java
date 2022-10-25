@@ -48,8 +48,7 @@ public class BombermanGame extends Application {
 
     public static List<Booster> boosterObjects = new ArrayList<>();
 
-    public static List<Entity> brokenBrick = new ArrayList<>();
-
+    public static Portal portal;
     public static PlayerState state;
 
     boolean running, goNorth, goSouth, goEast, goWest;
@@ -143,20 +142,21 @@ public class BombermanGame extends Application {
                     case 'x':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
-                        object = new Portal(j, i, Sprite.portal.getFxImage());
-                        stillObjects.add(object);
+
+                        portal = new Portal(j, i, Sprite.portal.getFxImage());
+
                         break;
                     case '1':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Balloom(j, i, Sprite.balloom_left1.getFxImage());
-                        //entities.add((MovingEntity) object);
+                        entities.add((MovingEntity) object);
                         break;
                     case '2':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         object = new Oneal(j, i, Sprite.oneal_left1.getFxImage());
-                        //entities.add((MovingEntity) object);
+                        entities.add((MovingEntity) object);
                         break;
                     case 'b':
                         object = new Grass(j, i, Sprite.grass.getFxImage());
@@ -260,6 +260,10 @@ public class BombermanGame extends Application {
                         return;
                     }
                 }
+
+                if (i.shape.intersects(portal.shape.getLayoutBounds()) && entities.size() == 1) {
+                    System.out.println("Change level");
+                }
             }
             i.update(finalDx, finalDy);
         });
@@ -272,9 +276,11 @@ public class BombermanGame extends Application {
 
         stillObjects.forEach(g -> g.render(gc));
 
+        portal.render(gc);
+
         if (boosterObjects.size() > 0) {
             boosterObjects.forEach(g -> {
-//                drawRectangle(gc, g.shape, Color.GREEN);
+//                drawRectangle(gc, g.shape, Color.BLUE);
                 g.render(gc);
             });
         }
@@ -286,7 +292,7 @@ public class BombermanGame extends Application {
 
         if (entities.size() > 0) {
             entities.forEach(g -> {
-                drawRectangle(gc, g.shape, Color.RED);
+//                drawRectangle(gc, g.shape, Color.RED);
                 g.render(gc);
             });
         }
