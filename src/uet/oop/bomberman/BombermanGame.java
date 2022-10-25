@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.ui.HUD;
+import uet.oop.bomberman.ui.RetroGamingFonts;
 import uet.oop.bomberman.utils.Level;
 
 import java.util.*;
@@ -32,9 +33,7 @@ public class BombermanGame extends Application {
     public static double ACTUAL_WIDTH = 0;
     public static double ACTUAL_HEIGHT = 0;
     private Bomber player;
-
-    public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
-
+    private GameState gameState = new GameState();
     // HUD
     private HUD hud;
 
@@ -72,7 +71,7 @@ public class BombermanGame extends Application {
     public void start(Stage stage) {
 
         Label levelLabel = new Label("LEVEL 1");
-        hud = new HUD(retrogamingFont, state);
+        hud = new HUD(RetroGamingFonts.size15, state);
 
         // Tao Canvas
         canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
@@ -120,8 +119,8 @@ public class BombermanGame extends Application {
                     keyReleasedListener();
                     if (state.isPlaying) {
                         update();
-                        render();
                     }
+                    render();
                     lastUpdate = now;
                 }
             }
@@ -295,6 +294,9 @@ public class BombermanGame extends Application {
                 g.render(gc);
             });
         }
+        if (!state.isPlaying) {
+            drawMenuWindow();
+        }
     }
 
     private void keyPressedListener() {
@@ -304,13 +306,23 @@ public class BombermanGame extends Application {
                     case ESCAPE:
                         state.isPlaying = !state.isPlaying;
                         hud.updateIsPausing(!state.isPlaying);
-                        drawPauseWindow();
+                        drawMenuWindow();
                         break;
                     case UP:
-                        goNorth = true;
+                        if (state.isPlaying) {
+                            goNorth = true;
+                        } else {
+                            gameState.optionNumber = (gameState.optionNumber == 0 ? GameState.MAX_OPTION_NUMBER - 1 : --gameState.optionNumber) % GameState.MAX_OPTION_NUMBER;
+                            System.out.println(gameState.optionNumber);
+                        }
                         break;
                     case DOWN:
-                        goSouth = true;
+                        if (state.isPlaying) {
+                            goSouth = true;
+                        } else {
+                            gameState.optionNumber = (gameState.optionNumber + 1) % GameState.MAX_OPTION_NUMBER;
+                            System.out.println(gameState.optionNumber);
+                        }
                         break;
                     case LEFT:
                         goWest = true;
@@ -383,11 +395,25 @@ public class BombermanGame extends Application {
         gc.fillRoundRect(x, y, width, height, 35, 35);
     }
 
-    public void drawPauseWindow() {
-        drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 300, (int) Math.round(ACTUAL_HEIGHT / 2) - 150, 600, 300);
+    public void drawMenuWindow() {
+        drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 150, (int) Math.round(ACTUAL_HEIGHT / 2) - 150, 300, 300);
         gc.setFill(Color.WHITE);
-        gc.setFont(retrogamingFont);
-        gc.fillText("MENU", Math.round(ACTUAL_WIDTH / 2) - 30, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 30);
+        gc.setFont(RetroGamingFonts.size30);
+        gc.fillText("MENU", Math.round(ACTUAL_WIDTH / 2) - 50, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 30);
+        gc.setFont(RetroGamingFonts.size20);
+        gc.fillText("Music", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 70);
+        if (gameState.optionNumber == 0) {
+            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 70);
+        }
+        gc.fillText("Sound", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 100);
+        if (gameState.optionNumber == 1) {
+            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 100);
+        }
+        gc.fillText("Exit game", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 130);
+        if (gameState.optionNumber == 2) {
+            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 130);
+        }
+
     }
     public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
         gc.setFill(color);
