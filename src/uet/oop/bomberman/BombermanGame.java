@@ -28,6 +28,9 @@ public class BombermanGame extends Application {
     public static int currentBomb = 0;
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
+
+    public static double ACTUAL_WIDTH = 0;
+    public static double ACTUAL_HEIGHT = 0;
     private Bomber player;
 
     public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
@@ -103,6 +106,9 @@ public class BombermanGame extends Application {
         stage.show();
 
         hud.setRowWidth(stage.getWidth());
+
+        ACTUAL_WIDTH = canvas.getWidth();
+        ACTUAL_HEIGHT = canvas.getHeight();
 
         AnimationTimer timer = new AnimationTimer() {
 
@@ -295,9 +301,10 @@ public class BombermanGame extends Application {
         if (player.getState() != EntityState.DIE) {
             scene.setOnKeyPressed(event -> {
                 switch (event.getCode()) {
-                    case P:
+                    case ESCAPE:
                         state.isPlaying = !state.isPlaying;
                         hud.updateIsPausing(!state.isPlaying);
+                        drawPauseWindow();
                         break;
                     case UP:
                         goNorth = true;
@@ -370,6 +377,18 @@ public class BombermanGame extends Application {
         obstacleObjects.forEach(Entity::update);
     }
 
+    public void drawSubWindow(int x, int y, int width, int height) {
+        Color c = new Color(0,0,0,0.9);
+        gc.setFill(c);
+        gc.fillRoundRect(x, y, width, height, 35, 35);
+    }
+
+    public void drawPauseWindow() {
+        drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 300, (int) Math.round(ACTUAL_HEIGHT / 2) - 150, 600, 300);
+        gc.setFill(Color.WHITE);
+        gc.setFont(retrogamingFont);
+        gc.fillText("MENU", Math.round(ACTUAL_WIDTH / 2) - 30, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 30);
+    }
     public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
         gc.setFill(color);
         gc.fillRect(rect.getX(),
