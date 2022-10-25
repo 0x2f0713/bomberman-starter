@@ -1,8 +1,10 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
+import uet.oop.bomberman.graphics.Sprite;
 
-public class Booster extends Entity{
+public class Booster extends Entity {
     protected boolean disappear = false;
 
     public boolean isDisappear() {
@@ -11,6 +13,10 @@ public class Booster extends Entity{
 
     public Booster(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+        int plus = 4;
+        int subtract = plus * 2;
+        this.shape = new Rectangle(xUnit * Sprite.SCALED_SIZE + 10, yUnit * Sprite.SCALED_SIZE + 4,
+                Sprite.SCALED_SIZE - 10, Sprite.SCALED_SIZE - subtract);
     }
 
     @Override

@@ -271,16 +271,20 @@ public class BombermanGame extends Application {
         stillObjects.forEach(g -> g.render(gc));
 
         if (boosterObjects.size() > 0) {
-            boosterObjects.forEach(g -> g.render(gc));
+            boosterObjects.forEach(g -> {
+//                drawRectangle(gc, g.shape, Color.GREEN);
+                g.render(gc);
+            });
         }
 
         obstacleObjects.forEach(g -> {
 //            drawRectangle(gc, g.shape, Color.BLUE);
             g.render(gc);
         });
+
         if (entities.size() > 0) {
             entities.forEach(g -> {
-//                drawRectangle(gc, g.shape, Color.RED);
+                drawRectangle(gc, g.shape, Color.RED);
                 g.render(gc);
             });
         }
@@ -288,7 +292,6 @@ public class BombermanGame extends Application {
 
 
         if (bombDeque.size() > 0) {
-
             bombDeque.forEach(g -> g.render(gc));
         }
 

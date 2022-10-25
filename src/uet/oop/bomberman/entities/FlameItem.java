@@ -12,7 +12,7 @@ public class FlameItem extends Booster {
 
     @Override
     public void update() {
-        if (shape.intersects(entities.get(0).shape.getLayoutBounds()) && entities.get(0) instanceof  Bomber) {
+        if (entities.size() > 0 && shape.intersects(entities.get(0).shape.getLayoutBounds()) && entities.get(0) instanceof  Bomber) {
             state.increaseFlame();
             disappear = true;
         }
