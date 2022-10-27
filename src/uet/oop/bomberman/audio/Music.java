@@ -10,9 +10,9 @@ public class Music {
     private Media media;
     private MediaPlayer player;
 
-    public static Music stage_start = new Music("res/sounds/stage_start.mp3");
-    public static Music stage_theme = new Music("res/sounds/stage_theme.mp3");
-    public static Music title_screen = new Music("res/sounds/title_screen.mp3");
+    public static Music stage_start = new Music("res/music/stage_start.mp3");
+    public static Music stage_theme = new Music("res/music/stage_theme.mp3");
+    public static Music title_screen = new Music("res/music/title_screen.mp3");
     Music(String path) {
         this.media = new Media(new File(path).toURI().toString());
         this.player = new MediaPlayer(media);
