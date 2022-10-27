@@ -18,7 +18,7 @@ public class PlayerState {
     }
 
     public void increaseSpeed() {
-        speed += 20;
+        speed += 60;
     }
 
     public int getLevel() {

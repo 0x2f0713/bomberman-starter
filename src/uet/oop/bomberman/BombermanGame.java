@@ -202,7 +202,7 @@ public class BombermanGame extends Application {
     public void update() {
         int dx = 0, dy = 0;
 
-        final int DEFAULT_SPEED = 5;
+        int DEFAULT_SPEED = player.getSpeed();
 
         if (goNorth) dy -= DEFAULT_SPEED;
         if (goSouth) dy += DEFAULT_SPEED;

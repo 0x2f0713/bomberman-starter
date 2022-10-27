@@ -9,6 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.graphics.Sprite;
 
+import static uet.oop.bomberman.BombermanGame.state;
 import java.awt.*;
 
 public class Bomber extends MovingEntity {
@@ -68,6 +69,7 @@ public class Bomber extends MovingEntity {
         BombermanState = EntityState.ALIVE;
         goUp = goDown = goLeft = false;
         goRight = true;
+        SPEED = state.getSpeed()/30;
     }
 
     @Override
@@ -103,7 +105,13 @@ public class Bomber extends MovingEntity {
         }
     }
 
+    public void setSpeed(int speed) {
+        SPEED = speed;
+    }
 
+    public int getSpeed() {
+        return SPEED;
+    }
 
     private void changeMovement(int dx, int dy) {
         if (dx != 0) {

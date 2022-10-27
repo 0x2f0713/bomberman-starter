@@ -1,8 +1,8 @@
 package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
-
 public abstract class MovingEntity extends Entity{
+    protected int SPEED = 4;
     protected int timeAnimationChange;
     protected int timeDieAnimation;
     protected boolean disappear;
