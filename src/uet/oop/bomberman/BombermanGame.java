@@ -25,11 +25,14 @@ import java.util.*;
 
 public class BombermanGame extends Application {
 
+    private boolean isWin = false;
+    private boolean isLose = false;
+
     public static int currentBomb = 0;
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
     private Bomber player;
-
+    private Level level;
     public static Font retrogamingFont = Font.loadFont("file:res/fonts/Retro Gaming/Retro Gaming.ttf", 15);
 
     // HUD
@@ -56,18 +59,10 @@ public class BombermanGame extends Application {
     private Scene scene;
     public void init() {
         state = new PlayerState();
+        level = Level.level1;
         player = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(player);
-    }
 
-    public static void main(String[] args) {
-        Application.launch(BombermanGame.class);
-    }
-
-    @Override
-    public void start(Stage stage) {
-
-        Label levelLabel = new Label("LEVEL 1");
         hud = new HUD(retrogamingFont, state);
 
         // Tao Canvas
@@ -89,6 +84,16 @@ public class BombermanGame extends Application {
         // Tao root container
         layoutPane.addRow(0, hudPane);
         layoutPane.addRow(1, canvas);
+    }
+
+
+    public static void main(String[] args) {
+        Application.launch(BombermanGame.class);
+    }
+
+    @Override
+    public void start(Stage stage) {
+
 
         Group root = new Group();
         root.getChildren().addAll(layoutPane);
@@ -100,6 +105,7 @@ public class BombermanGame extends Application {
         stage.setTitle("Bomberman Game");
         stage.setScene(scene);
         stage.show();
+
 
         hud.setRowWidth(stage.getWidth());
 
@@ -123,11 +129,31 @@ public class BombermanGame extends Application {
 
     }
 
+    private void clear() {
+        flameList.clear();
+        entities.clear();
+        boosterObjects.clear();
+        stillObjects.clear();
+        bombDeque.clear();
+        obstacleObjects.clear();
+
+    }
+
+    private void changeLevel() {
+        level = Level.level2;
+        clear();
+        createMap();
+        state = new PlayerState();
+        player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        entities.add(0, player);
+
+    }
+
     public void createMap() {
-        for (int i = 0; i < Level.level1.getRowCount(); i++) {
-            for (int j = 0; j < Level.level1.getColumnCount(); j++) {
+        for (int i = 0; i < level.getRowCount(); i++) {
+            for (int j = 0; j < level.getColumnCount(); j++) {
                 Entity object;
-                char o = Level.level1.map.map.get(i).row.get(j);
+                char o = level.map.map.get(i).row.get(j);
                 switch (o) {
                     case '#':
                         object = new Wall(j, i, Sprite.wall.getFxImage());
@@ -237,7 +263,8 @@ public class BombermanGame extends Application {
     }
 
     private void updateMovingEntity(int finalDx, int finalDy) {
-        if (entities.get(0).isDisappear()) {
+
+        if (entities.get(0).isDisappear() && entities.get(0) instanceof Bomber) {
             state.minusLife();
             entities.remove(0);
             if (state.getLife() > 0) {
@@ -245,7 +272,7 @@ public class BombermanGame extends Application {
                 player.setState(EntityState.GOD);
                 entities.add(0, player);
             } else {
-                System.out.println(123);
+                isLose = true;
             }
         }
 
@@ -262,13 +289,18 @@ public class BombermanGame extends Application {
                 }
 
                 if (i.shape.intersects(portal.shape.getLayoutBounds()) && entities.size() == 1) {
-                    System.out.println("Change level");
+                    isWin = true;
                 }
             }
             i.update(finalDx, finalDy);
         });
 
         entities.forEach(Entity::update);
+
+        if (isWin) {
+            changeLevel();
+            isWin = false;
+        }
     }
 
     public void render() {
