@@ -290,7 +290,7 @@ public class BombermanGame extends Application {
             state.minusLife();
             entities.remove(0);
             if (state.getLife() > 0) {
-                player = new Bomber(4, 4, Sprite.player_right.getFxImage());
+                player = new Bomber(1, 1, Sprite.player_right.getFxImage());
                 player.setState(EntityState.GOD);
                 entities.add(0, player);
             } else {
