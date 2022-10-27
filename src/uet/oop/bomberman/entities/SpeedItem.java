@@ -14,11 +14,18 @@ public class SpeedItem extends Booster {
 
     @Override
     public void update() {
-        if (entities.size() > 0 && shape.intersects(entities.get(0).shape.getLayoutBounds()) && entities.get(0) instanceof  Bomber) {
-            state.increaseSpeed();
-            ((Bomber) entities.get(0)).setSpeed(state.getSpeed() / 30);
-            disappear = true;
-        }
+        entities.forEach(i -> {
+            if (entities.size() > 0 && shape.intersects(i.shape.getLayoutBounds()) ) {
+                if (i instanceof Bomber) {
+                    state.increaseSpeed();
+                    ((Bomber) entities.get(0)).setSpeed(state.getSpeed() / 30);
+                }
+                else {
+                    i.SPEED += 4;
+                }
+                disappear = true;
+            }
+        });
     }
 
     @Override

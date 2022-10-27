@@ -30,7 +30,7 @@ public class UpdateFlame {
         updateDown(bomb);
         updateLeft(bomb);
         updateRight(bomb);
-        Flame flame = new Flame((bomb.getX() / 32), (bomb.getY() / 32),
+        Flame flame = new Flame(bomb.getXUnit(), bomb.getYUnit(),
                 Sprite.bomb_exploded.getFxImage(), "center");
         flameList.add(flame);
         entities.forEach(g -> {
@@ -44,7 +44,7 @@ public class UpdateFlame {
         AtomicBoolean stop = new AtomicBoolean(false);
         int i = 1;
         while (i <= state.getFlame() && !stop.get()) {
-            Flame flame = new Flame((bomb.getX() / 32), (bomb.getY() / 32) - i,
+            Flame flame = new Flame(bomb.getXUnit(), bomb.getYUnit() - i,
                     Sprite.explosion_vertical.getFxImage(), "mid", "top");
             if (i == state.getFlame()) {
                 flame.setPosition("last");
@@ -70,7 +70,7 @@ public class UpdateFlame {
         AtomicBoolean stop = new AtomicBoolean(false);
         int i = 1;
         while (i <= state.getFlame() && !stop.get()) {
-            Flame flame = new Flame((bomb.getX() / 32), (bomb.getY() / 32) + i,
+            Flame flame = new Flame(bomb.getXUnit(), bomb.getYUnit() + i,
                     Sprite.explosion_vertical.getFxImage(),"mid", "down");
 
             if (i == state.getFlame()){
@@ -99,7 +99,7 @@ public class UpdateFlame {
         AtomicBoolean stop = new AtomicBoolean(false);
         int i = 1;
         while (i <= state.getFlame() && !stop.get()) {
-            Flame flame = new Flame((bomb.getX() / 32) - i, (bomb.getY() / 32),
+            Flame flame = new Flame(bomb.getXUnit() - i, bomb.getYUnit(),
                     Sprite.explosion_horizontal.getFxImage(),"mid", "left");
 
             if (i == state.getFlame()){
@@ -128,7 +128,7 @@ public class UpdateFlame {
         AtomicBoolean stop = new AtomicBoolean(false);
         int i = 1;
         while (i <= state.getFlame() && !stop.get()) {
-            Flame flame = new Flame((bomb.getX() / 32) + i, (bomb.getY() / 32),
+            Flame flame = new Flame(bomb.getXUnit() + i, bomb.getYUnit(),
                     Sprite.explosion_horizontal.getFxImage(),"mid", "right");
 
             if (i == state.getFlame()){
