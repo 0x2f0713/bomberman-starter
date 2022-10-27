@@ -5,11 +5,23 @@ public class PlayerState {
     private int remainingTime = 120;
     private int score = 0;
     private int speed = 120;
-    private int flame = 2;
-    private int bomb = 3;
+    private int flame = 1;
+    private int bomb = 1;
     private int life = 3;
 
     public boolean isPlaying = true;
+
+    public void increaseFlame() {
+        flame++;
+    }
+
+    public void increaseBomb() {
+        bomb++;
+    }
+
+    public void increaseSpeed() {
+        speed += 30;
+    }
 
     public int getLevel() {
         return level;

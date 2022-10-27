@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.audio.Sound;
 import uet.oop.bomberman.graphics.Sprite;
 
+import static uet.oop.bomberman.BombermanGame.state;
 import java.awt.*;
 
 public class Bomber extends MovingEntity {
@@ -20,6 +21,24 @@ public class Bomber extends MovingEntity {
 
     public boolean collisionOn = false;
     private EntityState BombermanState;
+
+    @Override
+    public EntityState getState() {
+        return BombermanState;
+    }
+
+    @Override
+    public void setState(EntityState bombermanState) {
+        BombermanState = bombermanState;
+    }
+
+    public void setSpeed(int speed) {
+        SPEED = speed;
+    }
+
+    public int getSpeed() {
+        return SPEED;
+    }
 
     public boolean isGoUp() {
         return goUp;
@@ -41,16 +60,6 @@ public class Bomber extends MovingEntity {
         return goLeft;
     }
 
-    @Override
-    public EntityState getState() {
-        return BombermanState;
-    }
-
-    @Override
-    public void setState(EntityState bombermanState) {
-        BombermanState = bombermanState;
-    }
-
     public void setGoLeft(boolean goLeft) {
         this.goLeft = goLeft;
     }
@@ -65,10 +74,11 @@ public class Bomber extends MovingEntity {
 
     public Bomber(int x, int y, Image img) {
         super(x, y, img);
-        shape = new Rectangle(25, 32, 30 ,20);
+        shape = new Rectangle(32, 32, 23 ,27);
         BombermanState = EntityState.ALIVE;
         goUp = goDown = goLeft = false;
         goRight = true;
+        SPEED = state.getSpeed()/30;
     }
 
     @Override
@@ -86,7 +96,7 @@ public class Bomber extends MovingEntity {
         if (BombermanState != EntityState.DIE) {
             x += dx;
             y += dy;
-            shape.setX(x);
+            shape.setX(x - 2);
             shape.setY(y + 3);
 //        if (dx != 0 ||  dy != 0) {
 //            Sound.walk_1.play();

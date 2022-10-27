@@ -47,6 +47,7 @@ public class Level {
 //    public static Level level1 = new Level("Level1.txt");
 //    public static Level level1 = new Level("Level1.txt");
 //    public static Level level1 = new Level("Level1.txt");
+//    public static Level level1 = new Level("Level1.txt");
 
     Level(String path) {
         try {

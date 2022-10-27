@@ -3,14 +3,16 @@ package uet.oop.bomberman.entities;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 
-import java.util.Objects;
+
+import static uet.oop.bomberman.UpdateFlame.flameList;
+import static uet.oop.bomberman.BombermanGame.entities;
 
 public class Flame extends Entity{
 
     private String position;
     private String direction;
     private int timeAnimationChange;
-    private final int timeToDisappear = 12;
+    private final int timeToDisappear = 10;
     private boolean disappear = false;
 
     public Flame(int xUnit, int yUnit, Image img, String direction) {
@@ -104,14 +106,21 @@ public class Flame extends Entity{
 
         if (direction.equals("top") || direction.equals("down")) {
             updateVertical();
-        }
-        else if(direction.equals("left") || direction.equals("right")) {
+        } else if(direction.equals("left") || direction.equals("right")) {
             updateHorizontal();
         }
 
         if (timeAnimationChange == timeToDisappear) {
             disappear = true;
         }
+        entities.forEach(g -> {
+            flameList.forEach(i -> {
+                if (g.shape.intersects(i.shape.getLayoutBounds()) &&
+                        (g instanceof Enemy || (g instanceof Bomber && g.getState() != EntityState.GOD)) ) {
+                    g.setState(EntityState.DIE);
+                }
+            });
+        });
     }
 
     @Override

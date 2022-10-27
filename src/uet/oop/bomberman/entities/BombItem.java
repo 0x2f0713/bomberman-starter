@@ -3,6 +3,9 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.image.Image;
 
+import static uet.oop.bomberman.BombermanGame.entities;
+import static uet.oop.bomberman.BombermanGame.state;
+
 public class BombItem extends Booster {
 
     public BombItem(int x, int y, Image img) {
@@ -11,7 +14,10 @@ public class BombItem extends Booster {
 
     @Override
     public void update() {
-
+        if (entities.size() > 0 && shape.intersects(entities.get(0).shape.getLayoutBounds()) && entities.get(0) instanceof  Bomber) {
+            state.increaseBomb();
+            disappear = true;
+        }
     }
 
     @Override
