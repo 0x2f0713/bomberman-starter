@@ -25,4 +25,8 @@ public class Music {
     public void stop() {
         this.player.stop();
     }
+
+    public void setVolume(double v) {
+        this.player.setVolume(v);
+    }
 }
