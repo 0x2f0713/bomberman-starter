@@ -470,22 +470,42 @@ public class BombermanGame extends Application {
     }
 
     public void drawMenuWindow() {
+        int line1 = 90;
+        int line2 = 140;
+        int line3 = 190;
         drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 150, (int) Math.round(ACTUAL_HEIGHT / 2) - 150, 300, 300);
         gc.setFill(Color.WHITE);
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(3);
         gc.setFont(RetroGamingFonts.size30);
-        gc.fillText("MENU", Math.round(ACTUAL_WIDTH / 2) - 50, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 30);
+        gc.fillText("MENU", Math.round(ACTUAL_WIDTH / 2) - 50, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 40);
         gc.setFont(RetroGamingFonts.size20);
-        gc.fillText("Music", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 70);
+
+        // Line 1
+        gc.fillText("Music", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line1);
         if (gameState.optionNumber == 0) {
-            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 70);
+            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line1);
         }
-        gc.fillText("Sound", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 100);
+        gc.strokeRect(Math.round(ACTUAL_WIDTH / 2) + 50, Math.round(ACTUAL_HEIGHT / 2) - 150 + line1 - 17, 20, 20);
+        if (gameState.musicEnabled) {
+            gc.fillText("x",Math.round(ACTUAL_WIDTH / 2) + 50 + 2, Math.round(ACTUAL_HEIGHT / 2) - 150 + line1 - 2);
+        }
+
+        // Line 2
+        gc.fillText("Sound FX", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line2);
         if (gameState.optionNumber == 1) {
-            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 100);
+            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line2);
         }
-        gc.fillText("Exit game", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 130);
+        gc.strokeRect(Math.round(ACTUAL_WIDTH / 2) + 50, Math.round(ACTUAL_HEIGHT / 2) - 150 + line2 - 17, 20, 20);
+        if (gameState.soundEnabled) {
+            gc.fillText("x",Math.round(ACTUAL_WIDTH / 2) + 50 + 2, Math.round(ACTUAL_HEIGHT / 2) - 150 + line2 - 2);
+//            gc.fillRect(Math.round(ACTUAL_WIDTH / 2) + 30, Math.round(ACTUAL_HEIGHT / 2) - 150 + line2 - 17, 20, 20);
+        }
+
+        // Line 3
+        gc.fillText("Exit game", Math.round(ACTUAL_WIDTH / 2) - 100, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line3);
         if (gameState.optionNumber == 2) {
-            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 130);
+            gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line3);
         }
 
     }
