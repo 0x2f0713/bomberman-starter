@@ -237,7 +237,7 @@ public class BombermanGame extends Application {
             state.minusLife();
             entities.remove(0);
             if (state.getLife() > 0) {
-                player = new Bomber(1, 1, Sprite.player_right.getFxImage());
+                player = new Bomber(4, 4, Sprite.player_right.getFxImage());
                 player.setState(EntityState.GOD);
                 entities.add(0, player);
             } else {
@@ -313,7 +313,6 @@ public class BombermanGame extends Application {
                             goNorth = true;
                         } else {
                             gameState.optionNumber = (gameState.optionNumber == 0 ? GameState.MAX_OPTION_NUMBER - 1 : --gameState.optionNumber) % GameState.MAX_OPTION_NUMBER;
-                            System.out.println(gameState.optionNumber);
                         }
                         break;
                     case DOWN:
@@ -321,7 +320,6 @@ public class BombermanGame extends Application {
                             goSouth = true;
                         } else {
                             gameState.optionNumber = (gameState.optionNumber + 1) % GameState.MAX_OPTION_NUMBER;
-                            System.out.println(gameState.optionNumber);
                         }
                         break;
                     case LEFT:
