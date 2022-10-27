@@ -6,6 +6,7 @@ import static uet.oop.bomberman.UpdateFlame.flameList;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import uet.oop.bomberman.audio.Music;
+import uet.oop.bomberman.audio.Sound;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.ui.HUD;
@@ -23,6 +26,7 @@ import uet.oop.bomberman.ui.RetroGamingFonts;
 import uet.oop.bomberman.utils.Level;
 
 import java.util.*;
+import java.util.List;
 
 public class BombermanGame extends Application {
 
@@ -135,6 +139,7 @@ public class BombermanGame extends Application {
         timer.start();
 
         createMap();
+        Music.stage_theme.play();
 
     }
 
@@ -397,10 +402,25 @@ public class BombermanGame extends Application {
                         running = true;
                         break;
                     case SPACE:
-                        if (currentBomb < state.getBomb() && player.getState() != EntityState.DIE) {
-                            Bomb bomb = new Bomb((player.getX() + 10) / 32, (player.getY() + 10) / 32, Sprite.bomb.getFxImage());
-                            bombDeque.offerLast(bomb);
-                            currentBomb++;
+                        if (state.isPlaying) {
+                            if (currentBomb < state.getBomb() && player.getState() != EntityState.DIE) {
+                                Bomb bomb = new Bomb((player.getX() + 10) / 32, (player.getY() + 10) / 32, Sprite.bomb.getFxImage());
+                                bombDeque.offerLast(bomb);
+                                currentBomb++;
+                            }
+                        } else {
+                            switch (gameState.optionNumber) {
+                                case 0:
+                                    gameState.musicEnabled = !gameState.musicEnabled;
+                                    Music.stage_theme.setVolume(gameState.musicEnabled ? 0.5 : 0);
+                                    break;
+                                case 1:
+                                    gameState.soundEnabled = !gameState.soundEnabled;
+                                    break;
+                                case 2:
+                                    Platform.exit();
+                                    break;
+                            }
                         }
                 }
 
