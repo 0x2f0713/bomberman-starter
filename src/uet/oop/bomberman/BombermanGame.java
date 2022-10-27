@@ -284,6 +284,15 @@ public class BombermanGame extends Application {
                     Rectangle shape = new Rectangle(i.shape.getX() + finalDx, i.shape.getY() + finalDy,
                             i.shape.getHeight(), i.shape.getWidth());
                     if (entity.shape.intersects(shape.getBoundsInLocal())) {
+                        if (goNorth) {
+                            player.setImg(Sprite.player_up.getFxImage());
+                        } else if (goSouth) {
+                            player.setImg(Sprite.player_down.getFxImage());
+                        } else if (goEast) {
+                            player.setImg(Sprite.player_right.getFxImage());
+                        } else if (goWest) {
+                            player.setImg(Sprite.player_left.getFxImage());
+                        }
                         return;
                     }
                 }

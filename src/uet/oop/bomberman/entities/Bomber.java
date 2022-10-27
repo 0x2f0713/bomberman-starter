@@ -21,6 +21,24 @@ public class Bomber extends MovingEntity {
     public boolean collisionOn = false;
     private EntityState BombermanState;
 
+    @Override
+    public EntityState getState() {
+        return BombermanState;
+    }
+
+    @Override
+    public void setState(EntityState bombermanState) {
+        BombermanState = bombermanState;
+    }
+
+    public void setSpeed(int speed) {
+        SPEED = speed;
+    }
+
+    public int getSpeed() {
+        return SPEED;
+    }
+
     public boolean isGoUp() {
         return goUp;
     }
@@ -39,16 +57,6 @@ public class Bomber extends MovingEntity {
 
     public boolean isGoLeft() {
         return goLeft;
-    }
-
-    @Override
-    public EntityState getState() {
-        return BombermanState;
-    }
-
-    @Override
-    public void setState(EntityState bombermanState) {
-        BombermanState = bombermanState;
     }
 
     public void setGoLeft(boolean goLeft) {
@@ -103,14 +111,6 @@ public class Bomber extends MovingEntity {
             }
             timeDieAnimation++;
         }
-    }
-
-    public void setSpeed(int speed) {
-        SPEED = speed;
-    }
-
-    public int getSpeed() {
-        return SPEED;
     }
 
     private void changeMovement(int dx, int dy) {
