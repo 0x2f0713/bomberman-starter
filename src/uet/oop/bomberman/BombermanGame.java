@@ -274,6 +274,14 @@ public class BombermanGame extends Application {
         if (boosterObjects.size() > 0) {
             updateBooster();
         }
+
+        // Update HUD
+        hud.updateBomb(state.getBomb());
+        hud.updateFlame(state.getFlame());
+        hud.updateLevel(state.getLevel());
+        hud.updateLife(state.getLife());
+        hud.updateScore(state.getScore());
+        hud.updateSpeed(state.getSpeed());
     }
 
     private void updateMovingEntity(int finalDx, int finalDy) {
