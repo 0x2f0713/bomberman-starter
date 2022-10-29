@@ -7,6 +7,7 @@ import static uet.oop.bomberman.UpdateFlame.flameList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import uet.oop.bomberman.audio.Music;
 import uet.oop.bomberman.audio.Sound;
@@ -372,6 +374,9 @@ public class BombermanGame extends Application {
                 g.render(gc);
             });
         }
+        if (isLose) {
+            drawGameOver();
+        }
         if (!state.isPlaying) {
             drawMenuWindow();
         }
@@ -504,6 +509,8 @@ public class BombermanGame extends Application {
         drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 150, (int) Math.round(ACTUAL_HEIGHT / 2) - 150, 300, 300);
         gc.setFill(Color.WHITE);
         gc.setStroke(Color.WHITE);
+        gc.setTextAlign(TextAlignment.LEFT);
+        gc.setTextBaseline(VPos.BASELINE);
         gc.setLineWidth(3);
         gc.setFont(RetroGamingFonts.size30);
         gc.fillText("MENU", Math.round(ACTUAL_WIDTH / 2) - 50, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + 40);
@@ -536,6 +543,15 @@ public class BombermanGame extends Application {
             gc.fillText(">", Math.round(ACTUAL_WIDTH / 2) - 120, (int) Math.round(ACTUAL_HEIGHT / 2) - 150 + line3);
         }
 
+    }
+
+    public void drawGameOver() {
+        drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 150, (int) Math.round(ACTUAL_HEIGHT / 2) - 100, 300, 200);
+        gc.setFill(Color.WHITE);
+        gc.setFont(RetroGamingFonts.size30);
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setTextBaseline(VPos.CENTER);
+        gc.fillText("GAMEOVER", Math.round(ACTUAL_WIDTH / 2), (int) Math.round(ACTUAL_HEIGHT / 2));
     }
     public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
         gc.setFill(color);
