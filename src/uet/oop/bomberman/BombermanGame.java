@@ -297,6 +297,9 @@ public class BombermanGame extends Application {
                 entities.add(0, player);
             } else {
                 isLose = true;
+                if (GameState.soundEnabled) {
+                    Sound.game_over.play();
+                }
             }
         }
 
@@ -332,6 +335,9 @@ public class BombermanGame extends Application {
 
         if (isWin) {
             changeLevel();
+            if (GameState.soundEnabled) {
+                Sound.next_level.play();
+            }
             isWin = false;
         }
     }
@@ -394,6 +400,7 @@ public class BombermanGame extends Application {
                     case UP:
                         if (state.isPlaying) {
                             goNorth = true;
+//                            Sound.walk_1.play();
                         } else {
                             gameState.optionNumber = (gameState.optionNumber == 0 ? GameState.MAX_OPTION_NUMBER - 1 : --gameState.optionNumber) % GameState.MAX_OPTION_NUMBER;
                         }
@@ -401,15 +408,18 @@ public class BombermanGame extends Application {
                     case DOWN:
                         if (state.isPlaying) {
                             goSouth = true;
+//                            Sound.walk_2.play();
                         } else {
                             gameState.optionNumber = (gameState.optionNumber + 1) % GameState.MAX_OPTION_NUMBER;
                         }
                         break;
                     case LEFT:
                         goWest = true;
+//                        Sound.walk_4.play();
                         break;
                     case RIGHT:
                         goEast = true;
+//                        Sound.walk_1.play();
                         break;
                     case SHIFT:
                         running = true;
@@ -418,6 +428,9 @@ public class BombermanGame extends Application {
                         if (state.isPlaying) {
                             if (currentBomb < state.getBomb() && player.getState() != EntityState.DIE) {
                                 Bomb bomb = new Bomb((player.getX() + 10) / 32, (player.getY() + 10) / 32, Sprite.bomb.getFxImage());
+                                if (GameState.soundEnabled) {
+                                    Sound.placed_bomb.play();
+                                }
                                 bombDeque.offerLast(bomb);
                                 currentBomb++;
                             }
@@ -464,8 +477,12 @@ public class BombermanGame extends Application {
     }
 
     private void updateBomb() {
+        //chô này là để xem quả nào nổ rồi thì cho ra xong tạo lửa cho vào addflame
         assert bombDeque.peek() != null;
         if (bombDeque.peek().isExploded()) {
+            if (GameState.soundEnabled) {
+                Sound.bomb_explored.play();
+            }
             addFlame(Objects.requireNonNull(bombDeque.poll()));
             currentBomb--;
         }
