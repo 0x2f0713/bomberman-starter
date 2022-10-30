@@ -160,6 +160,7 @@ public class BombermanGame extends Application {
         clear();
         createMap();
         state = new PlayerState();
+        state.setLevel(2);
         player = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(0, player);
 
@@ -334,11 +335,13 @@ public class BombermanGame extends Application {
         entities.forEach(Entity::update);
 
         if (isWin) {
-            changeLevel();
-            if (GameState.soundEnabled) {
-                Sound.next_level.play();
+            if (state.getLevel() == 1) {
+                changeLevel();
+                if (GameState.soundEnabled) {
+                    Sound.next_level.play();
+                }
+                isWin = false;
             }
-            isWin = false;
         }
     }
 
@@ -385,6 +388,10 @@ public class BombermanGame extends Application {
         }
         if (!state.isPlaying) {
             drawMenuWindow();
+        }
+
+        if (isWin && state.getLevel() == 2) {
+            drawGameWin();
         }
     }
 
@@ -569,6 +576,14 @@ public class BombermanGame extends Application {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         gc.fillText("GAMEOVER", Math.round(ACTUAL_WIDTH / 2), (int) Math.round(ACTUAL_HEIGHT / 2));
+    }
+    public void drawGameWin() {
+        drawSubWindow((int) Math.round(ACTUAL_WIDTH / 2) - 150, (int) Math.round(ACTUAL_HEIGHT / 2) - 100, 300, 200);
+        gc.setFill(Color.WHITE);
+        gc.setFont(RetroGamingFonts.size30);
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setTextBaseline(VPos.CENTER);
+        gc.fillText("YOU WIN!", Math.round(ACTUAL_WIDTH / 2), (int) Math.round(ACTUAL_HEIGHT / 2));
     }
     public void drawRectangle(GraphicsContext gc, Rectangle rect, Color color){
         gc.setFill(color);
