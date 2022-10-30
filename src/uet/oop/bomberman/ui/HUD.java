@@ -34,14 +34,12 @@ public class HUD {
 
     public HUD(Font font, PlayerState state) {
         setLevelText(new GameText(10, 50, font, "LEVEL %d", state.getLevel()));
-        setTimeText(new GameText(10, 50, font, "TIME %d", state.getRemainingTime()));
+//        setTimeText(new GameText(10, 50, font, "TIME %d", state.getRemainingTime()));
         setIsPausingText(new GameText(10, 50, font, "%s", state.isPlaying ? "" : "PAUSING"));
         row1 = createRow(
                 this.levelText,
                 spacer(),
-                this.isPausingText,
-                spacer(),
-                this.timeText
+                this.isPausingText
         );
         setScoreText(new GameText(10, 50, font, "SCORE %d", state.getScore()));
         setSpeedText(new GameText(10, 50, font, "SPEED %d", state.getSpeed()));
