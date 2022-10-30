@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Entity {
@@ -16,10 +17,36 @@ public abstract class Entity {
 
     protected Image img;
 
+    public Rectangle shape;
+
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
     public Entity( int xUnit, int yUnit, Image img) {
         this.x = xUnit * Sprite.SCALED_SIZE;
         this.y = yUnit * Sprite.SCALED_SIZE;
+        int plus = 4;
+        int subtract = plus * 2;
+        this.shape = new Rectangle(xUnit * Sprite.SCALED_SIZE + plus, yUnit * Sprite.SCALED_SIZE + plus,
+                Sprite.SCALED_SIZE - subtract, Sprite.SCALED_SIZE - subtract);
+        this.img = img;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getXUnit() {
+        return x /32;
+    }
+
+    public int getYUnit() {
+        return y /32;
+    }
+
+    public void setImg(Image img) {
         this.img = img;
     }
 
@@ -27,4 +54,8 @@ public abstract class Entity {
         gc.drawImage(img, x, y);
     }
     public abstract void update();
+
+    public abstract void update(int dx, int dy);
+    public abstract void update(int dx, int dy, Image img);
+
 }
